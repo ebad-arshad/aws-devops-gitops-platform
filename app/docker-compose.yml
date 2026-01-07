@@ -2,8 +2,6 @@
 # This docker-compose file is for local development only.
 # Production deployment is done using Kubernetes.
 
-version: "3.8"
-
 x-postgres-common: &postgres-common
   image: postgres:alpine3.19
   user: postgres
