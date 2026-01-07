@@ -11,7 +11,6 @@ pipeline {
         REPO_URL = "github.com/ebad-arshad/aws-devops-gitops-platform.git"
         BASE_VERSION = "1.0" 
         VERSION = "${BASE_VERSION}.${BUILD_NUMBER}"
-        SHOULD_BUILD = 'false'
     }
     
     stages{
