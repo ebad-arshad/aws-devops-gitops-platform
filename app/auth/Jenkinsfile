@@ -81,7 +81,7 @@ pipeline {
             steps {
                 sh "docker build -t ${env.IMAGE_NAME}:${env.VERSION} app/${env.APP_NAME}/"
                 // sh "trivy image ${env.IMAGE_NAME}:${env.VERSION} --severity HIGH,CRITICAL"
-                sh "docker push ${env.IMAGE_NAME}:${env.VERSION}"
+                sh "docker push ${env.IMAGE_NAME}:${env.VERSION}" 
             }
         }
 

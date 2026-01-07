@@ -86,7 +86,7 @@ pipeline {
         }
  
         stage('GitOps Update') {
-            when { expression { return env.SHOULD_BUILD == "true" } }
+            when { expression { return env.SHOULD_BUILD == "true" } } 
 
             steps {
                 dir('k8s/overlays/dev') {
