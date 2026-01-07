@@ -79,7 +79,6 @@ pipeline {
         }
 
         stage('GitOps Update') {
-            when { branch 'master' }
             steps {
                 dir('k8s/overlays/dev') {
                     // Update ONLY the image for this specific microservice
