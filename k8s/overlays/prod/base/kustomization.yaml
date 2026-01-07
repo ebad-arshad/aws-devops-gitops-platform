@@ -1,0 +1,11 @@
+resources:
+  - ../../../base/auth
+  - ../../../base/product
+  - ../../../base/order
+  - ../../../base/api-gateway
+
+patches:
+  - path: auth-patch.yaml
+  - path: product-patch.yaml
+  - path: order-patch.yaml
+  - path: api-gateway-patch.yaml

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq-service 
+spec:
+  clusterIP: None 
+  selector:
+    app: rabbitmq
+  ports:
+    - name: amqp         # For Product/Order services
+      port: 5672
+      targetPort: 5672
+    - name: http         # For browser
+      port: 15672
+      targetPort: 15672

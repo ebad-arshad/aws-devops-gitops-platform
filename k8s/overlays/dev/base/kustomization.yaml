@@ -1,0 +1,52 @@
+resources:
+  - ../../../base/auth
+  - ../../../base/product
+  - ../../../base/order
+  - ../../../base/api-gateway
+  - ../../../base/rabbitmq
+
+patches:
+  - path: auth-patch.yaml
+  - path: product-patch.yaml
+  - path: order-patch.yaml
+  - path: api-gateway-patch.yaml
+
+secretGenerator:
+- name: auth-secret
+  literals:
+    - POSTGRES_HOST=dev-auth-db-service
+    - POSTGRES_USER=user
+    - POSTGRES_PASSWORD=password
+    - POSTGRES_DB=auth
+
+- name: order-secret
+  literals:
+    - POSTGRES_HOST=dev-order-db-service
+    - POSTGRES_USER=user
+    - POSTGRES_PASSWORD=password
+    - POSTGRES_DB=order
+    - RABBITMQ_PRODUCT_QUEUE=product
+    - RABBITMQ_ORDER_QUEUE=order
+    - PRODUCT_URL=http://dev-product-service:5002
+    - RABBITMQ_URL=amqp://dev-rabbitmq-service:5672
+
+- name: product-secret
+  literals:
+    - POSTGRES_HOST=dev-product-db-service
+    - POSTGRES_USER=user
+    - POSTGRES_PASSWORD=password
+    - POSTGRES_DB=product
+    - RABBITMQ_PRODUCT_QUEUE=product
+    - RABBITMQ_ORDER_QUEUE=order
+    - RABBITMQ_URL=amqp://dev-rabbitmq-service:5672
+
+- name: rabbitmq-secret
+  literals:
+    - RABBITMQ_DEFAULT_USER=ebad
+    - RABBITMQ_DEFAULT_PASS=password
+
+- name: api-gateway-secret
+  literals:
+    - AUTH_URL=http://dev-auth-service:5001
+    - PRODUCT_URL=http://dev-product-service:5002
+    - ORDER_URL=http://dev-order-service:5003

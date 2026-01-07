@@ -1,3 +1,7 @@
+namePrefix: dev-
+namespace: ecommerce-dev
+
 resources:
-  - replicas.yaml
-  - resources.yaml
+  - namespace.yaml
+  - base
+  - db

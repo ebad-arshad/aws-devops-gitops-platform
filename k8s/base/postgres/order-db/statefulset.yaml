@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: order-db
+spec:
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: order-db
+  serviceName: "order-db-service"
+  minReadySeconds: 10
+  template:
+    metadata:
+      labels:
+        app: order-db
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: order-db
+          image: postgres:alpine3.19
+          ports:
+            - containerPort: 5432
+              name: postgres
+              
+          envFrom:
+            - secretRef:
+                name: order-db-secret
+                
+          readinessProbe:
+            exec:
+              command: ["pg_isready", "-U", "user", "--dbname=order"]
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            exec:
+              command: ["pg_isready", "-U", "user", "--dbname=order"]
+            initialDelaySeconds: 15
+            periodSeconds: 20
+
+          volumeMounts:
+            - name: order-db
+              mountPath: /var/lib/postgresql/data
+              subPath: postgres
+  volumeClaimTemplates:
+    - metadata:
+        name: order-db
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi

@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: product
+  labels:
+    app: product
+spec:
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: product
+      
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+
+  template:
+    metadata:
+      labels:
+        app: product
+    spec:
+      containers:
+        - name: product
+          image: ebadarshad/ecommerce-product:0.0.2
+          ports:
+            - containerPort: 5002
+
+          livenessProbe:
+            tcpSocket:
+              port: 5002
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          readinessProbe:
+            tcpSocket:
+              port: 5002
+            initialDelaySeconds: 15
+            periodSeconds: 10
+
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            allowPrivilegeEscalation: false
+
+          envFrom:
+            - secretRef:
+                name: product-secret

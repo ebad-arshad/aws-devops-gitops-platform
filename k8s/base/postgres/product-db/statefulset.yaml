@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: product-db
+spec:
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: product-db
+  serviceName: "product-db-service"
+  minReadySeconds: 10
+  template:
+    metadata:
+      labels:
+        app: product-db
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: product-db
+          image: postgres:alpine3.19
+          ports:
+            - containerPort: 5432
+              name: postgres
+              
+          envFrom:
+            - secretRef:
+                name: product-db-secret
+                
+          readinessProbe:
+            exec:
+              command: ["pg_isready", "-U", "user", "--dbname=product"]
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            exec:
+              command: ["pg_isready", "-U", "user", "--dbname=product"]
+            initialDelaySeconds: 15
+            periodSeconds: 20
+
+          volumeMounts:
+            - name: product-db
+              mountPath: /var/lib/postgresql/data
+              subPath: postgres
+  volumeClaimTemplates:
+    - metadata:
+        name: product-db
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi

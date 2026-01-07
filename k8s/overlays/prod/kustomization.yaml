@@ -1,4 +1,6 @@
+namePrefix: prod-
+namespace: ecommerce-prod
+
 resources:
-  - replicas.yaml
-  - resources.yaml
-  - hpa.yaml
+  - base
+  - db

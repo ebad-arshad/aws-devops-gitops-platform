@@ -1,5 +1,4 @@
 resources:
-  - auth-db.yaml
-  - product-db.yaml
-  - order-db.yaml
-  - secret.yaml
+  - auth-db
+  - order-db
+  - product-db
