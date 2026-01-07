@@ -76,7 +76,7 @@ pipeline {
         }
 
         stage('Build, Scan & Push') {
-            when { expression { return env.SHOULD_BUILD == "true" } }
+            when { expression { return env.SHOULD_BUILD == "true" } } 
 
             steps {
                 sh "docker build -t ${env.IMAGE_NAME}:${env.VERSION} app/${env.APP_NAME}/"

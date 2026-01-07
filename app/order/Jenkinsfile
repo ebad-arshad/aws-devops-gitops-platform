@@ -84,7 +84,7 @@ pipeline {
                 sh "docker push ${env.IMAGE_NAME}:${env.VERSION}"
             }
         }
-
+ 
         stage('GitOps Update') {
             when { expression { return env.SHOULD_BUILD == "true" } }
 

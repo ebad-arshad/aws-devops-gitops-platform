@@ -94,7 +94,7 @@ pipeline {
                     sh "git pull origin master"
                     sh "kustomize edit set image ${env.IMAGE_NAME}=${env.IMAGE_NAME}:${env.VERSION}"
                 }
-                script {
+                script { 
                     withCredentials([usernamePassword(credentialsId: 'github-creds', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
                         sh """
                             git add k8s/overlays/dev/kustomization.yaml
