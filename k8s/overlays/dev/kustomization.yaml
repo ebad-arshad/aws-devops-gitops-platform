@@ -12,7 +12,7 @@ images:
   newTag: 1.0.27
 - name: ebadarshad/ecommerce-auth
   newName: ebadarshad/ecommerce-auth
-  newTag: 0.0.2
+  newTag: 1.0.38
 - name: ebadarshad/ecommerce-order
   newName: ebadarshad/ecommerce-order
   newTag: 1.0.30
