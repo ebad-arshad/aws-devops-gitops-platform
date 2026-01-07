@@ -39,7 +39,7 @@ pipeline {
 
 
         stage('Sparse Checkout') {
-            when { environment name: 'SHOULD_BUILD', value: 'true' }
+            when { expression { return env.SHOULD_BUILD == "true" } }
             steps {
                 // We use the full 'checkout' step instead of just 'git'
                 checkout([$class: 'GitSCM', 
@@ -54,13 +54,13 @@ pipeline {
                             [$class: 'SparseCheckoutPath', path: 'k8s/'],
                         ]]
                     ],  
-                    userRemoteConfigs: [[url: "https://${env.REPO_URL}"]]
+                    userRemoteConfigs: [[url: "https://${REPO_URL}"]]
                 ])
             }
         }
 
         // stage('Security Scan (Code)') {
-            // when { environment name: 'SHOULD_BUILD', value: 'true' }
+            //             when { expression { return env.SHOULD_BUILD == "true" } }
         //     steps {
         //         // SAST: Find secrets/vulns in your source code
         //         sh "trivy fs app/${APP_NAME} --severity HIGH,CRITICAL --exit-code 1"
@@ -68,7 +68,7 @@ pipeline {
         // }
 
         stage('Login DockerHub') {
-            when { environment name: 'SHOULD_BUILD', value: 'true' }
+            when { expression { return env.SHOULD_BUILD == "true" } }
             steps {
                 script {
                     dockerhub_login('docker-hub-creds')
@@ -77,7 +77,8 @@ pipeline {
         }
 
         stage('Build, Scan & Push') {
-            when { environment name: 'SHOULD_BUILD', value: 'true' }
+            when { expression { return env.SHOULD_BUILD == "true" } }
+
             steps {
                 sh "docker build -t ${IMAGE_NAME}:${VERSION} app/${APP_NAME}/"
                 // sh "trivy image ${IMAGE_NAME}:${VERSION} --severity HIGH,CRITICAL"
@@ -86,7 +87,8 @@ pipeline {
         }
 
         stage('GitOps Update') {
-            when { environment name: 'SHOULD_BUILD', value: 'true' }
+            when { expression { return env.SHOULD_BUILD == "true" } }
+
             steps {
                 dir('k8s/overlays/dev') {
                     // Update ONLY the image for this specific microservice
