@@ -9,7 +9,7 @@ spec:
   selector:
     matchLabels:
       app: product
-      
+
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -21,6 +21,15 @@ spec:
       labels:
         app: product
     spec:
+      initContainers:
+        - name: wait-for-db
+          image: busybox:1.28
+          command:
+            [
+              "sh",
+              "-c",
+              "until nc -zv dev-product-db-service 5432; do echo waiting for db; sleep 2; done;",
+            ]
       containers:
         - name: product
           image: ebadarshad/ecommerce-product:0.0.2
