@@ -5,3 +5,23 @@ resources:
   - namespace.yaml
   - base
   - db
+
+images:
+  - name: ebadarshad/ecommerce-api-gateway
+    newName: ebadarshad/ecommerce-api-gateway
+    newTag: 0.0.2
+  - name: ebadarshad/ecommerce-auth
+    newName: ebadarshad/ecommerce-auth
+    newTag: 0.0.2
+  - name: ebadarshad/ecommerce-order
+    newName: ebadarshad/ecommerce-order
+    newTag: 0.0.2
+  - name: ebadarshad/ecommerce-product
+    newName: ebadarshad/ecommerce-product
+    newTag: 0.0.2
+  - name: rabbitmq
+    newName: rabbitmq
+    newTag: 3-management-alpine
+  - name: postgres
+    newName: postgres
+    newTag: alpine3.19
