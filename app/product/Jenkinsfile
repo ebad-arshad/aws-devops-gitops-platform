@@ -50,7 +50,7 @@ pipeline {
                             [$class: 'SparseCheckoutPath', path: "app/${APP_NAME}/"], 
                             [$class: 'SparseCheckoutPath', path: 'k8s/'],
                         ]]
-                    ], 
+                    ],  
                     userRemoteConfigs: [[url: "https://${env.REPO_URL}"]]
                 ])
             }

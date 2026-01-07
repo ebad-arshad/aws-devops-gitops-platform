@@ -39,7 +39,7 @@ pipeline {
         stage('Sparse Checkout') {
             steps {
                 // We use the full 'checkout' step instead of just 'git'
-                checkout([$class: 'GitSCM', 
+                checkout([$class: 'GitSCM',  
                     branches: [[name: '*/master']], 
                     doGenerateSubmoduleConfigurations: false, 
                     extensions: [

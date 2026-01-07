@@ -47,7 +47,7 @@ pipeline {
                         [$class: 'PollingIgnoreCommitMessages', excludedMessage: '.*\\[skip ci\\].*'],
                         [$class: 'SparseCheckoutPaths', 
                         sparseCheckoutPaths: [
-                            [$class: 'SparseCheckoutPath', path: "app/${APP_NAME}/"], 
+                            [$class: 'SparseCheckoutPath', path: "app/${APP_NAME}/"],  
                             [$class: 'SparseCheckoutPath', path: 'k8s/'],
                         ]]
                     ], 
