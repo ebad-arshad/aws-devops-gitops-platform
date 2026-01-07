@@ -3,16 +3,17 @@
 
 pipeline {
     agent { label 'slave' }
-
+    
+    environment {
+        GIT_EMAIL = 'm.ebadarshad2003@gmail.com'
+        APP_NAME = 'api-gateway'
+        IMAGE_NAME = "ebadarshad/ecommerce-${APP_NAME}"
+        REPO_URL = "https://github.com/ebad-arshad/aws-devops-gitops-platform.git"
+        BASE_VERSION = "1.0"
+        VERSION = "${BASE_VERSION}.${env.BUILD_NUMBER}"
+    }
+    
     stages{
-        environment {
-            GIT_EMAIL = 'm.ebadarshad2003@gmail.com'
-            APP_NAME = 'auth'
-            IMAGE_NAME = "ebadarshad/ecommerce-${APP_NAME}"
-            REPO_URL = "https://github.com/ebad-arshad/aws-devops-gitops-platform.git"
-            BASE_VERSION = "1.0"
-            VERSION = "${BASE_VERSION}.${env.BUILD_NUMBER}"
-        }
 
         stage('Check Changes') {
             steps {
