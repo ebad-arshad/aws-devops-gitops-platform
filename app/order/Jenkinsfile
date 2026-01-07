@@ -91,6 +91,7 @@ pipeline {
             steps {
                 dir('k8s/overlays/dev') {
                     // Update ONLY the image for this specific microservice
+                    sh "git pull -X theirs"
                     sh "kustomize edit set image ${env.IMAGE_NAME}=${env.IMAGE_NAME}:${env.VERSION}"
                 }
                 script {
@@ -100,8 +101,6 @@ pipeline {
 
                             if ! git diff --cached --quiet; then
                                 git commit -m '[skip ci] Author: ${env.GIT_EMAIL} , CI: Updated Image ${env.IMAGE_NAME} env.version to ${env.VERSION}'
-                                git fetch origin master
-                                git rebase origin/master
                                 git push https://${env.GIT_TOKEN}@${env.REPO_URL} HEAD:master
                             else
                                 echo "No changes to commit"
