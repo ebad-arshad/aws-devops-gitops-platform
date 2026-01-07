@@ -9,6 +9,7 @@ pipeline {
         APP_NAME = 'product'
         IMAGE_NAME = "ebadarshad/ecommerce-${APP_NAME}"
         REPO_URL = "https://github.com/ebad-arshad/aws-devops-gitops-platform.git"
+        REPO_PATH = "ebad-arshad/aws-devops-gitops-platform.git"
         BASE_VERSION = "1.0" 
         VERSION = "${BASE_VERSION}.${BUILD_NUMBER}"
     }
@@ -92,7 +93,7 @@ pipeline {
                             if ! git diff --cached --quiet; then
                                 git commit -m 'Author: ${GIT_EMAIL} , CI: Updated Image ${IMAGE_NAME} version to ${VERSION} [skip ci]'
                                 
-                                git push https://${GIT_TOKEN}@${REPO_URL} HEAD:master
+                                git push https://${GIT_TOKEN}@${REPO_PATH} HEAD:master
                             fi
                         """
                     }
