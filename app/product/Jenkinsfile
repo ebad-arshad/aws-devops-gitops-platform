@@ -9,7 +9,7 @@ pipeline {
         APP_NAME = 'api-gateway'
         IMAGE_NAME = "ebadarshad/ecommerce-${APP_NAME}"
         REPO_URL = "https://github.com/ebad-arshad/aws-devops-gitops-platform.git"
-        BASE_VERSION = "1.0"
+        BASE_VERSION = "1.0" 
         VERSION = "${BASE_VERSION}.${env.BUILD_NUMBER}"
     }
     
