@@ -47,7 +47,7 @@ pipeline {
                     doGenerateSubmoduleConfigurations: false, 
                     extensions: [
                         [$class: 'CleanBeforeCheckout'],
-                        [$class: 'MessageExclusion', excludedMessage: '.*\[skip ci\].*']
+                        [$class: 'MessageExclusion', excludedMessage: '(?s).*skip-CI.*']
                         [$class: 'SparseCheckoutPaths', 
                         sparseCheckoutPaths: [
                             [$class: 'SparseCheckoutPath', path: "app/${env.APP_NAME}/"], 
@@ -101,7 +101,7 @@ pipeline {
                             git add k8s/overlays/dev/kustomization.yaml
 
                             if ! git diff --cached --quiet; then
-                                git commit -m '[skip ci] Author: ${env.GIT_EMAIL} , CI: Updated Image ${env.IMAGE_NAME} env.version to ${env.VERSION}'
+                                git commit -m 'skip-CI Author: ${env.GIT_EMAIL} , CI: Updated Image ${env.IMAGE_NAME} env.version to ${env.VERSION}'
                                 git push https://${env.GIT_TOKEN}@${env.REPO_URL} HEAD:master
                             else
                                 echo "No changes to commit"
