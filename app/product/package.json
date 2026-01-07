@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "author": "Hatim",
-  "license": "MIT",
-  "repository": "https://github.com/hmn53/ecommerce-microservice.git",
   "scripts": {
     "dev": "npm run migrate && nodemon index.js",
     "start": "npm run migrate && node index.js",
