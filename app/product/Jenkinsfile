@@ -89,6 +89,7 @@ pipeline {
             when { expression { return env.SHOULD_BUILD == "true" } }
 
             steps {
+                sleep time: 0, unit: 'SECONDS'
                 dir('k8s/overlays/dev') {
                     // Update ONLY the image for this specific microservice
                     sh "git pull origin master"
