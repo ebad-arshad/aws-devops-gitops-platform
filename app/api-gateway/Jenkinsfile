@@ -38,6 +38,7 @@ pipeline {
         }
 
         stage('Sparse Checkout') {
+            when { environment name: 'SHOULD_BUILD', value: 'true' }
             steps {
                 when { environment name: 'SHOULD_BUILD', value: 'true' }
                 checkout([$class: 'GitSCM', 
@@ -58,6 +59,7 @@ pipeline {
         }
 
         // stage('Security Scan (Code)') {
+            // when { environment name: 'SHOULD_BUILD', value: 'true' }
         //     steps {
                    // when { environment name: 'SHOULD_BUILD', value: 'true' }
         //         // SAST: Find secrets/vulns in your source code
