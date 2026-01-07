@@ -96,12 +96,18 @@ pipeline {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'github-creds', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
                         sh """
+                            git fetch origin master
+
+                            git rebase origin/master
+
                             git add k8s/overlays/dev/kustomization.yaml
 
                             if ! git diff --cached --quiet; then
-                                git commit -m 'Author: ${env.GIT_EMAIL} , CI: Updated Image ${env.IMAGE_NAME} env.version to ${env.VERSION} [skip ci]'
+                                git commit -m '[skip ci] Author: ${env.GIT_EMAIL} , CI: Updated Image ${env.IMAGE_NAME} env.version to ${env.VERSION}'
                                 
                                 git push https://${env.GIT_TOKEN}@${env.REPO_URL} HEAD:master
+                            else
+                                echo "No changes to commit"
                             fi
                         """
                     }
