@@ -18,7 +18,7 @@ images:
   newTag: 1.0.30
 - name: ebadarshad/ecommerce-product
   newName: ebadarshad/ecommerce-product
-  newTag: 1.0.27
+  newTag: 1.0.34
 - name: postgres
   newName: postgres
   newTag: alpine3.19
