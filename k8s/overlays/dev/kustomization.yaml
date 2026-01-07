@@ -1,0 +1,3 @@
+resources:
+  - replicas.yaml
+  - resources.yaml
