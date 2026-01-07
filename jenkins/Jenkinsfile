@@ -6,8 +6,12 @@ pipeline {
 
     stages{
         stage('Semantic Versioning') {
-            def BASE_VERSION = "1.0"
-            env.VERSION = "${BASE_VERSION}.${env.BUILD_NUMBER}"
+            steps{
+                script {
+                    def BASE_VERSION = "1.0"
+                    env.VERSION = "${BASE_VERSION}.${env.BUILD_NUMBER}"
+                }
+            }
         }
 
         stage('Sparse Checkout') {
@@ -30,7 +34,11 @@ pipeline {
         }
 
         stage('Test') {
-            sh 'ls -ltr'
+            steps {
+                script {
+                    sh 'ls -ltr'
+                }
+            }
         }
 
     }
