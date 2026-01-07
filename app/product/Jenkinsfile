@@ -91,7 +91,7 @@ pipeline {
             steps {
                 dir('k8s/overlays/dev') {
                     // Update ONLY the image for this specific microservice
-                    sh "git pull -X theirs"
+                    sh "git pull origin master"
                     sh "kustomize edit set image ${env.IMAGE_NAME}=${env.IMAGE_NAME}:${env.VERSION}"
                 }
                 script {
