@@ -15,7 +15,7 @@ images:
   newTag: 1.0.38
 - name: ebadarshad/ecommerce-order
   newName: ebadarshad/ecommerce-order
-  newTag: 1.0.30
+  newTag: 1.0.40
 - name: ebadarshad/ecommerce-product
   newName: ebadarshad/ecommerce-product
   newTag: 1.0.34
