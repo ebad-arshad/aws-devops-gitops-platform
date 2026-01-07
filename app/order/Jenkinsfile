@@ -10,8 +10,7 @@ pipeline {
         IMAGE_NAME = "ebadarshad/ecommerce-${APP_NAME}"
         REPO_URL = "github.com/ebad-arshad/aws-devops-gitops-platform.git"
         BASE_VERSION = "1.0" 
-        VERSION = "${BASE_VERSION}.${BUILD_NUMBER}"
-        SHOULD_BUILD = 'false'
+        VERSION = "${env.BASE_VERSION}.${env.BUILD_NUMBER}"
     }
     
     stages{
@@ -21,7 +20,7 @@ pipeline {
                 script {
                     def status = sh(script: """
                         if git rev-parse HEAD~1 >/dev/null 2>&1; then
-                            git diff --name-only HEAD~1 HEAD | grep -E '^(app/${APP_NAME}/)'
+                            git diff --name-only HEAD~1 HEAD | grep -E '^(app/${env.APP_NAME}/)'
                         else
                             exit 0
                         fi
@@ -29,9 +28,10 @@ pipeline {
 
                     if (status == 0) {
                         env.SHOULD_BUILD = 'true'
-                        echo "MATCH FOUND! Proceeding with build for ${APP_NAME}"
+                        echo env.SHOULD_BUILD
+                        echo "MATCH FOUND! Proceeding with build for ${env.APP_NAME}"
                     } else {
-                        echo "NO MATCH. Skipping build for ${APP_NAME}"
+                        echo "NO MATCH. Skipping build for ${env.APP_NAME}"
                     }
                 }
             }
@@ -39,7 +39,7 @@ pipeline {
 
 
         stage('Sparse Checkout') {
-            when { environment name: 'SHOULD_BUILD', value: 'true' }
+            when { expression { return env.SHOULD_BUILD == "true" } }
             steps {
                 // We use the full 'checkout' step instead of just 'git'
                 checkout([$class: 'GitSCM', 
@@ -47,28 +47,27 @@ pipeline {
                     doGenerateSubmoduleConfigurations: false, 
                     extensions: [
                         [$class: 'CleanBeforeCheckout'],
-                        [$class: 'PollingIgnoreCommitMessages', excludedMessage: '.*\\[skip ci\\].*'],
                         [$class: 'SparseCheckoutPaths', 
                         sparseCheckoutPaths: [
-                            [$class: 'SparseCheckoutPath', path: "app/${APP_NAME}/"],  
+                            [$class: 'SparseCheckoutPath', path: "app/${env.APP_NAME}/"], 
                             [$class: 'SparseCheckoutPath', path: 'k8s/'],
                         ]]
-                    ], 
+                    ],  
                     userRemoteConfigs: [[url: "https://${env.REPO_URL}"]]
                 ])
             }
         }
 
         // stage('Security Scan (Code)') {
-            // when { environment name: 'SHOULD_BUILD', value: 'true' }
+            //             when { expression { return env.SHOULD_BUILD == "true" } }
         //     steps {
         //         // SAST: Find secrets/vulns in your source code
-        //         sh "trivy fs app/${APP_NAME} --severity HIGH,CRITICAL --exit-code 1"
+        //         sh "trivy fs app/${env.APP_NAME} --severity HIGH,CRITICAL --exit-code 1"
         //     }
         // }
 
         stage('Login DockerHub') {
-            when { environment name: 'SHOULD_BUILD', value: 'true' }
+            when { expression { return env.SHOULD_BUILD == "true" } }
             steps {
                 script {
                     dockerhub_login('docker-hub-creds')
@@ -77,20 +76,22 @@ pipeline {
         }
 
         stage('Build, Scan & Push') {
-            when { environment name: 'SHOULD_BUILD', value: 'true' }
+            when { expression { return env.SHOULD_BUILD == "true" } }
+
             steps {
-                sh "docker build -t ${IMAGE_NAME}:${VERSION} app/${APP_NAME}/"
-                // sh "trivy image ${IMAGE_NAME}:${VERSION} --severity HIGH,CRITICAL"
-                sh "docker push ${IMAGE_NAME}:${VERSION}"
+                sh "docker build -t ${env.IMAGE_NAME}:${env.VERSION} app/${env.APP_NAME}/"
+                // sh "trivy image ${env.IMAGE_NAME}:${env.VERSION} --severity HIGH,CRITICAL"
+                sh "docker push ${env.IMAGE_NAME}:${env.VERSION}"
             }
         }
 
         stage('GitOps Update') {
-            when { environment name: 'SHOULD_BUILD', value: 'true' }
+            when { expression { return env.SHOULD_BUILD == "true" } }
+
             steps {
                 dir('k8s/overlays/dev') {
                     // Update ONLY the image for this specific microservice
-                    sh "kustomize edit set image ${IMAGE_NAME}=${IMAGE_NAME}:${VERSION}"
+                    sh "kustomize edit set image ${env.IMAGE_NAME}=${env.IMAGE_NAME}:${env.VERSION}"
                 }
                 script {
                     withCredentials([usernamePassword(credentialsId: 'github-creds', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
@@ -98,9 +99,9 @@ pipeline {
                             git add k8s/overlays/dev/kustomization.yaml
 
                             if ! git diff --cached --quiet; then
-                                git commit -m 'Author: ${GIT_EMAIL} , CI: Updated Image ${IMAGE_NAME} version to ${VERSION} [skip ci]'
+                                git commit -m 'Author: ${env.GIT_EMAIL} , CI: Updated Image ${env.IMAGE_NAME} env.version to ${env.VERSION} [skip ci]'
                                 
-                                git push https://${GIT_TOKEN}@${REPO_URL} HEAD:master
+                                git push https://${env.GIT_TOKEN}@${env.REPO_URL} HEAD:master
                             fi
                         """
                     }
