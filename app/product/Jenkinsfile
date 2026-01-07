@@ -5,12 +5,12 @@ pipeline {
     agent { label 'slave' }
     
     environment {
-        env.GIT_EMAIL = 'm.ebadarshad2003@gmail.com'
-        env.APP_NAME = 'product'
-        env.IMAGE_NAME = "ebadarshad/ecommerce-${APP_NAME}"
-        env.REPO_URL = "github.com/ebad-arshad/aws-devops-gitops-platform.git"
-        env.BASE_VERSION = "1.0" 
-        env.VERSION = "${env.BASE_env.VERSION}.${env.BUILD_NUMBER}"
+        GIT_EMAIL = 'm.ebadarshad2003@gmail.com'
+        APP_NAME = 'product'
+        IMAGE_NAME = "ebadarshad/ecommerce-${APP_NAME}"
+        REPO_URL = "github.com/ebad-arshad/aws-devops-gitops-platform.git"
+        BASE_VERSION = "1.0" 
+        VERSION = "${env.BASE_env.VERSION}.${env.BUILD_NUMBER}"
     }
     
     stages{
