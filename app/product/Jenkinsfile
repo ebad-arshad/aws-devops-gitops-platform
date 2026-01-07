@@ -1,0 +1,103 @@
+@Library('shared') _
+
+
+pipeline {
+    agent { label 'slave' }
+
+    stages{
+        environment {
+            GIT_EMAIL = 'm.ebadarshad2003@gmail.com'
+            APP_NAME = 'product'
+            IMAGE_NAME = "ebadarshad/ecommerce-${APP_NAME}"
+            REPO_URL = "https://github.com/ebad-arshad/aws-devops-gitops-platform.git"
+            BASE_VERSION = "1.0"
+            VERSION = "${BASE_VERSION}.${env.BUILD_NUMBER}"
+        }
+
+        stage('Check Changes') {
+            steps {
+                script {
+                    def changed = sh(script: """
+                        if git rev-parse HEAD~1 >/dev/null 2>&1; then
+                            git diff --name-only HEAD~1 HEAD | grep -E '^(app/${APP_NAME}/)'
+                        else
+                            echo "First build, proceeding..."
+                            exit 0
+                        fi
+                    """, returnStatus: true)
+                    
+                    if (changed != 0) {
+                        currentBuild.result = 'SUCCESS'
+                        echo "No relevant changes for ${APP_NAME}. Exiting."
+                        return 
+                    }
+                }
+            }
+        }
+
+        stage('Sparse Checkout') {
+            steps {
+                // We use the full 'checkout' step instead of just 'git'
+                checkout([$class: 'GitSCM', 
+                    branches: [[name: '*/master']], 
+                    doGenerateSubmoduleConfigurations: false, 
+                    extensions: [
+                        [$class: 'SparseCheckoutPaths', 
+                        sparseCheckoutPaths: [
+                            [$class: 'SparseCheckoutPath', path: "app/"],         // e.g., auth/
+                            [$class: 'SparseCheckoutPath', path: 'k8s/'],         // Your manifests
+                        ]]
+                    ], 
+                    userRemoteConfigs: [[url: ${env.REPO_URL}]]
+                ])
+            }
+        }
+
+        // stage('Security Scan (Code)') {
+        //     steps {
+        //         // SAST: Find secrets/vulns in your source code
+        //         sh "trivy fs app/${APP_NAME} --severity HIGH,CRITICAL --exit-code 1"
+        //     }
+        // }
+
+        stage('Login DockerHub') {
+            steps {
+                script {
+                    dockerhub_login('docker-hub-creds')
+                }
+            }
+        }
+
+        stage('Build, Scan & Push') {
+            steps {
+                sh "docker build -t ${IMAGE_NAME}:${VERSION} app/${APP_NAME}"
+                sh "trivy image ${IMAGE_NAME}:${VERSION} --severity HIGH,CRITICAL"
+                sh "docker push ${IMAGE_NAME}:${VERSION}"
+            }
+        }
+
+        stage('GitOps Update') {
+            when { branch 'master' }
+            steps {
+                dir('k8s/overlays/dev') {
+                    // Update ONLY the image for this specific microservice
+                    sh "kustomize edit set image ${IMAGE_NAME}=${IMAGE_NAME}:${VERSION}"
+                }
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'github-creds', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
+                        sh """
+                            git add k8s/overlays/dev/kustomization.yaml
+
+                            if ! git diff --cached --quiet; then
+                                git commit -m 'Author: ${GIT_EMAIL} , CI: Updated Image ${IMAGE_NAME} version to ${VERSION} [skip ci]'
+                                
+                                git push https://${GIT_TOKEN}@${REPO_URL} HEAD:master
+                            fi
+                        """
+                    }
+                }
+            }
+        }
+
+    }
+}

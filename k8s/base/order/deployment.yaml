@@ -32,7 +32,7 @@ spec:
             ]
       containers:
         - name: order
-          image: ebadarshad/ecommerce-order:0.0.2
+          image: ebadarshad/ecommerce-order
           ports:
             - containerPort: 5003
 

@@ -32,7 +32,7 @@ spec:
             ]
       containers:
         - name: product
-          image: ebadarshad/ecommerce-product:0.0.2
+          image: ebadarshad/ecommerce-product
           ports:
             - containerPort: 5002
 

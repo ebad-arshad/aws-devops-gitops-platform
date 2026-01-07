@@ -32,7 +32,7 @@ spec:
           ]
       containers:
         - name: auth
-          image: ebadarshad/ecommerce-auth:0.0.2
+          image: ebadarshad/ecommerce-auth
           ports:
             - containerPort: 5001
 
