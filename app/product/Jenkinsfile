@@ -29,6 +29,7 @@ pipeline {
 
                     if (status == 0) {
                         env.SHOULD_BUILD = 'true'
+                        echo env.SHOULD_BUILD
                         echo "MATCH FOUND! Proceeding with build for ${APP_NAME}"
                     } else {
                         echo "NO MATCH. Skipping build for ${APP_NAME}"
