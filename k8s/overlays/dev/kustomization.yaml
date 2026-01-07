@@ -9,7 +9,7 @@ resources:
 images:
 - name: ebadarshad/ecommerce-api-gateway
   newName: ebadarshad/ecommerce-api-gateway
-  newTag: 1.0.24
+  newTag: 1.0.27
 - name: ebadarshad/ecommerce-auth
   newName: ebadarshad/ecommerce-auth
   newTag: 0.0.2
