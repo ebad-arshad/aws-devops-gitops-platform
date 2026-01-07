@@ -44,6 +44,7 @@ pipeline {
                     doGenerateSubmoduleConfigurations: false, 
                     extensions: [
                         [$class: 'CleanBeforeCheckout'],
+                        [$class: 'PollingIgnoreCommitMessages', excludedMessage: '.*\\[skip ci\\].*'],
                         [$class: 'SparseCheckoutPaths', 
                         sparseCheckoutPaths: [
                             [$class: 'SparseCheckoutPath', path: "app/${APP_NAME}/"], 
