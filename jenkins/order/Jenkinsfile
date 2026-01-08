@@ -52,6 +52,8 @@ pipeline {
                     if (lastCommitMsg.startsWith("CI:")) {
                         echo "GitOps commit detected. Skipping pipeline."
                         env.SHOULD_BUILD = 'false'
+                        currentBuild.result = 'NOT_BUILT'
+                        currentBuild.description = 'GitOps commit - skipped'
                         return
                     }
 
