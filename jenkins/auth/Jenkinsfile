@@ -20,7 +20,7 @@ pipeline {
                 script {
                     def status = sh(script: """
                         if git rev-parse HEAD~1 >/dev/null 2>&1; then
-                            git diff --name-only HEAD~1 HEAD | grep -E '^(app/${env.APP_NAME}/)'
+                            git diff --name-only HEAD~1 HEAD | grep 'app/${env.APP_NAME}/'
                         else
                             exit 0
                         fi
