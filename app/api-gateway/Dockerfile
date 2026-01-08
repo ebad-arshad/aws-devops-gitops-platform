@@ -13,7 +13,7 @@ COPY package*.json ./
 # Install app dependencies
 RUN npm ci
 
-# Copy the rest of the application files to the container 
+# Copy the rest of the application files to the container  
 COPY . .
 
 # Set the command to start the app
