@@ -90,14 +90,11 @@ pipeline {
 
             steps {
                 dir('k8s/overlays/dev/base') {
-                    // Update ONLY the image for this specific microservice
-                    sh "sed -i 's|${IMAGE_NAME}:[^ ]*|${IMAGE_NAME}:${env.VERSION}|g' ${env.APP_NAME}-patch.yaml"
-                    // sh "kustomize edit set image ${env.IMAGE_NAME}=${env.IMAGE_NAME}:${env.VERSION}"
-                }
-                script { 
                     withCredentials([usernamePassword(credentialsId: 'github-creds', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
                         sh """
-                            git add k8s/overlays/dev/base/${env.APP_NAME}-patch.yaml
+                            sed -i 's|${IMAGE_NAME}:[^ ]*|${IMAGE_NAME}:${env.VERSION}|g' ${env.APP_NAME}-patch.yaml
+                            
+                            git add ${env.APP_NAME}-patch.yaml
 
                             if ! git diff --cached --quiet; then
                                 git commit -m 'Author: ${env.GIT_EMAIL} , CI: Updated Image ${env.IMAGE_NAME} env.version to ${env.VERSION}'
@@ -106,7 +103,7 @@ pipeline {
                                 echo "No changes to commit"
                             fi
                         """
-                    }
+                    }   
                 }
             }
         }
