@@ -8,7 +8,7 @@ spec:
     spec:
       containers:
         - name: api-gateway
-          image: ebadarshad/ecommerce-api-gateway:1.0.76
+          image: ebadarshad/ecommerce-api-gateway:1.0.88
           resources:
             requests:
               cpu: "250m"
