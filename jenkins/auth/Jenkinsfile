@@ -21,9 +21,30 @@ pipeline {
             }
         }
 
+        stage('Sparse Checkout') {
+            when { expression { return env.SHOULD_BUILD == "true" } }
+            steps {
+                // We use the full 'checkout' step instead of just 'git'
+                checkout([$class: 'GitSCM', 
+                    branches: [[name: '*/master']], 
+                    doGenerateSubmoduleConfigurations: false, 
+                    extensions: [
+                        [$class: 'CleanBeforeCheckout'],
+                        [$class: 'SparseCheckoutPaths', 
+                        sparseCheckoutPaths: [
+                            [$class: 'SparseCheckoutPath', path: "app/${env.APP_NAME}/"], 
+                            [$class: 'SparseCheckoutPath', path: 'k8s/'],
+                        ]]
+                    ],  
+                    userRemoteConfigs: [[url: "https://${env.REPO_URL}"]]
+                ])
+            }
+        }
+
         stage('Check Changes') {
             steps {
-                script {
+                dir("app/${env.APP_NAME}") {
+                    script {
                     def lastCommitMsg = sh(
                         script: "git log -1 --pretty=%B",
                         returnStdout: true
@@ -50,27 +71,7 @@ pipeline {
                         echo "No app changes detected for ${env.APP_NAME}"
                     }
                 }
-            }
-        }
-
-
-        stage('Sparse Checkout') {
-            when { expression { return env.SHOULD_BUILD == "true" } }
-            steps {
-                // We use the full 'checkout' step instead of just 'git'
-                checkout([$class: 'GitSCM', 
-                    branches: [[name: '*/master']], 
-                    doGenerateSubmoduleConfigurations: false, 
-                    extensions: [
-                        [$class: 'CleanBeforeCheckout'],
-                        [$class: 'SparseCheckoutPaths', 
-                        sparseCheckoutPaths: [
-                            [$class: 'SparseCheckoutPath', path: "app/${env.APP_NAME}/"], 
-                            [$class: 'SparseCheckoutPath', path: 'k8s/'],
-                        ]]
-                    ],  
-                    userRemoteConfigs: [[url: "https://${env.REPO_URL}"]]
-                ])
+                }
             }
         }
 

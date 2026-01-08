@@ -8,7 +8,7 @@ WORKDIR /app
 RUN apk add --no-cache curl
 
 # Copy package.json and package-lock.json to the container
-COPY package*.json ./ 
+COPY package*.json ./  
 
 # Install app dependencies
 RUN npm ci
