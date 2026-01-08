@@ -3,10 +3,10 @@ FROM node:16.13-alpine
 
 # Set the working directory to /app
 WORKDIR /app
-  
+
 # Install curl for testing APIs
 RUN apk add --no-cache curl
-   
+
 # Copy package.json and package-lock.json to the container
 COPY package*.json ./
 
@@ -17,4 +17,4 @@ RUN npm ci
 COPY . .
 
 # Set the command to start the app
-CMD [ "npm", "start" ]  
+CMD [ "npm", "start" ]
