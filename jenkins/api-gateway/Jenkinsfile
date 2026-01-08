@@ -107,20 +107,40 @@ pipeline {
             steps {
                 dir('k8s/overlays/dev/base') {
                     withCredentials([usernamePassword(credentialsId: 'github-creds', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
-                        sh """
-                            git pull origin master
-                    
-                            sed -i 's|${IMAGE_NAME}:[^ ]*|${IMAGE_NAME}:${env.VERSION}|g' ${env.APP_NAME}-patch.yaml
-                            
-                            git add ${env.APP_NAME}-patch.yaml
+                        script {
+                            // Sync once before modification
+                            sh """
+                                git fetch origin
+                                git pull --rebase origin master
+                            """
 
-                            if ! git diff --cached --quiet; then
-                                git commit -m 'CI: Updated Image ${env.IMAGE_NAME} env.version to ${env.VERSION} , Author: ${env.GIT_EMAIL}'
-                                git push https://${env.GIT_TOKEN}@${env.REPO_URL} HEAD:master
-                            else
-                                echo "No changes to commit"
-                            fi
-                        """
+                            // Modify manifest
+                            sh """
+                                sed -i 's|${IMAGE_NAME}:[^ ]*|${IMAGE_NAME}:${env.VERSION}|g' ${env.APP_NAME}-patch.yaml
+                                git add ${env.APP_NAME}-patch.yaml
+                            """
+
+                            // Commit once (if needed)
+                            def hasChanges = sh(
+                                script: "git diff --cached --quiet || echo 'yes'",
+                                returnStdout: true
+                            ).trim()
+
+                            if (hasChanges == "yes") {
+                                sh "git commit -m 'CI: Updated Image ${env.IMAGE_NAME} to ${env.VERSION}'"
+
+                                // Retry ONLY the push (safe)
+                                retry(3) {
+                                    sh """
+                                        git fetch origin
+                                        git pull --rebase origin master
+                                        git push https://${env.GIT_TOKEN}@${env.REPO_URL} HEAD:master
+                                    """
+                                }
+                            } else {
+                                echo "No GitOps changes to commit"
+                            }
+                        }
                     }   
                 }
             }
