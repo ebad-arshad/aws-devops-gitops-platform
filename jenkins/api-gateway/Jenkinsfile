@@ -89,11 +89,10 @@ pipeline {
             when { expression { return env.SHOULD_BUILD == "true" } }
 
             steps {
-                sleep time: 24, unit: 'SECONDS'
-                dir('k8s/overlays/dev') {
+                dir('k8s/overlays/dev/base') {
                     // Update ONLY the image for this specific microservice
-                    sh "git pull origin master"
-                    sh "kustomize edit set image ${env.IMAGE_NAME}=${env.IMAGE_NAME}:${env.VERSION}"
+                    sh "sed -i 's|${IMAGE_NAME}:[^ ]*|${IMAGE_NAME}:${env.VERSION}|g' ${env.APP_NAME}-patch.yaml"
+                    // sh "kustomize edit set image ${env.IMAGE_NAME}=${env.IMAGE_NAME}:${env.VERSION}"
                 }
                 script {
                     withCredentials([usernamePassword(credentialsId: 'github-creds', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
@@ -101,7 +100,7 @@ pipeline {
                             git add k8s/overlays/dev/kustomization.yaml
 
                             if ! git diff --cached --quiet; then
-                                git commit -m 'skip-CI Author: ${env.GIT_EMAIL} , CI: Updated Image ${env.IMAGE_NAME} env.version to ${env.VERSION}'
+                                git commit -m 'Author: ${env.GIT_EMAIL} , CI: Updated Image ${env.IMAGE_NAME} env.version to ${env.VERSION}'
                                 git push https://${env.GIT_TOKEN}@${env.REPO_URL} HEAD:master
                             else
                                 echo "No changes to commit"
