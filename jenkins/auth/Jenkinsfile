@@ -111,7 +111,6 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'github-creds', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
                         script {
                             sh """
-                                git fetch origin
                                 git pull --rebase origin master
                                 sed -i 's|${IMAGE_NAME}:[^ ]*|${IMAGE_NAME}:${env.VERSION}|g' ${env.APP_NAME}-patch.yaml
                                 git add ${env.APP_NAME}-patch.yaml
