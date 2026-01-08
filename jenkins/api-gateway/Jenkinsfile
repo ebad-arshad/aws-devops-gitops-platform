@@ -22,7 +22,6 @@ pipeline {
         }
 
         stage('Sparse Checkout') {
-            when { expression { return env.SHOULD_BUILD == "true" } }
             steps {
                 // We use the full 'checkout' step instead of just 'git'
                 checkout([$class: 'GitSCM', 
