@@ -97,7 +97,7 @@ pipeline {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'github-creds', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
                         sh """
-                            git add k8s/overlays/dev/kustomization.yaml
+                            git add k8s/overlays/dev/base/${env.APP_NAME}-patch.yaml
 
                             if ! git diff --cached --quiet; then
                                 git commit -m 'Author: ${env.GIT_EMAIL} , CI: Updated Image ${env.IMAGE_NAME} env.version to ${env.VERSION}'
