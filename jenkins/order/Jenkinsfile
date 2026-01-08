@@ -24,20 +24,30 @@ pipeline {
         stage('Check Changes') {
             steps {
                 script {
-                    def status = sh(script: """
-                        if git rev-parse HEAD~1 >/dev/null 2>&1; then
-                            git diff --name-only HEAD~1 HEAD | grep -E '^(app/${env.APP_NAME}/)'
-                        else
-                            exit 0
-                        fi
-                    """, returnStatus: true)
+                    def lastCommitMsg = sh(
+                        script: "git log -1 --pretty=%B",
+                        returnStdout: true
+                    ).trim()
+
+                    if (lastCommitMsg.startsWith("CI:")) {
+                        echo "GitOps commit detected. Skipping pipeline."
+                        env.SHOULD_BUILD = 'false'
+                        return
+                    }
+
+                    def status = sh(
+                        script: """
+                            git diff --name-only HEAD~1 HEAD | grep -E '^app/${env.APP_NAME}/'
+                        """,
+                        returnStatus: true
+                    )
 
                     if (status == 0) {
                         env.SHOULD_BUILD = 'true'
-                        echo env.SHOULD_BUILD
-                        echo "MATCH FOUND! Proceeding with build for ${env.APP_NAME}"
+                        echo "App changes detected for ${env.APP_NAME}"
                     } else {
-                        echo "NO MATCH. Skipping build for ${env.APP_NAME}"
+                        env.SHOULD_BUILD = 'false'
+                        echo "No app changes detected for ${env.APP_NAME}"
                     }
                 }
             }
@@ -103,7 +113,7 @@ pipeline {
                             git add ${env.APP_NAME}-patch.yaml
 
                             if ! git diff --cached --quiet; then
-                                git commit -m 'Author: ${env.GIT_EMAIL} , CI: Updated Image ${env.IMAGE_NAME} env.version to ${env.VERSION}'
+                                git commit -m 'CI: Updated Image ${env.IMAGE_NAME} env.version to ${env.VERSION} , Author: ${env.GIT_EMAIL}'
                                 git push https://${env.GIT_TOKEN}@${env.REPO_URL} HEAD:master
                             else
                                 echo "No changes to commit"
