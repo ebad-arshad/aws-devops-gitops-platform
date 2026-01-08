@@ -137,7 +137,7 @@ pipeline {
                                 sh "git commit -m 'CI: Updated Image ${env.IMAGE_NAME} to ${env.VERSION}'"
 
                                 // 4️⃣ Retry ONLY push
-                                retry(3) {
+                                retry(20) {
                                     sh """
                                         git fetch origin
                                         git pull --rebase origin master
