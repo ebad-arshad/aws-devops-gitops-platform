@@ -103,7 +103,9 @@ pipeline {
 
         stage('GitOps Update') {
             when { expression { return env.SHOULD_BUILD == "true" } }
-
+            options {
+                retry(10)
+            }
             steps {
                 dir('k8s/overlays/dev/base') {
                     withCredentials([usernamePassword(credentialsId: 'github-creds', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
@@ -127,17 +129,12 @@ pipeline {
                             ).trim()
 
                             if (hasChanges == "yes") {
-                                sh "git commit -m 'CI: Updated Image ${env.IMAGE_NAME} to ${env.VERSION}'"
-
-                                // Retry ONLY the push (safe)
-                                retry(3) {
-                                    sh """
-                                        git fetch origin
-                                        git pull --rebase origin master
+                                sh """
+                                        git commit -m 'CI: Updated Image ${env.IMAGE_NAME} to ${env.VERSION}'
                                         git push https://${env.GIT_TOKEN}@${env.REPO_URL} HEAD:master
                                     """
-                                }
-                            } else {
+                            }
+                            else {
                                 echo "No GitOps changes to commit"
                             }
                         }
