@@ -108,6 +108,8 @@ pipeline {
                 dir('k8s/overlays/dev/base') {
                     withCredentials([usernamePassword(credentialsId: 'github-creds', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
                         sh """
+                            git pull origin master
+                    
                             sed -i 's|${IMAGE_NAME}:[^ ]*|${IMAGE_NAME}:${env.VERSION}|g' ${env.APP_NAME}-patch.yaml
                             
                             git add ${env.APP_NAME}-patch.yaml
