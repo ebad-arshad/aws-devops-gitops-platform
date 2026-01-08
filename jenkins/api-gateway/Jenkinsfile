@@ -111,10 +111,10 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'github-creds', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
                         script {
                             sh """
-                                git pull --rebase origin master 
                                 sed -i 's|${IMAGE_NAME}:[^ ]*|${IMAGE_NAME}:${env.VERSION}|g' ${env.APP_NAME}-patch.yaml
                                 git add ${env.APP_NAME}-patch.yaml
                                 git commit -m 'CI: Updated Image ${env.IMAGE_NAME} to ${env.VERSION}'
+                                git pull --rebase origin master 
                                 git push https://${env.GIT_TOKEN}@${env.REPO_URL} HEAD:master
                             """
                         }
