@@ -8,7 +8,7 @@ spec:
     spec:
       containers:
         - name: order
-          image: ebadarshad/ecommerce-order:0.0.2
+          image: ebadarshad/ecommerce-order:1.0.78
           resources:
             requests:
               cpu: "250m"
