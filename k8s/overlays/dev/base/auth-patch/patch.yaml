@@ -17,7 +17,7 @@ spec:
           ]
       containers:
         - name: auth
-          image: ebadarshad/ecommerce-auth:1.0.106
+          image: ebadarshad/ecommerce-auth:1.0.125
           resources:
             requests:
               cpu: "250m"
