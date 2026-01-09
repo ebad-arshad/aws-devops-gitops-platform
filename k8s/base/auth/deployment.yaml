@@ -28,7 +28,7 @@ spec:
           [
             "sh",
             "-c",
-            "until nc -zv dev-auth-db-service 5432; do echo waiting for db; sleep 2; done;",
+            "until nc -zv auth-db-service 5432; do echo waiting for db; sleep 2; done;",
           ]
       containers:
         - name: auth
