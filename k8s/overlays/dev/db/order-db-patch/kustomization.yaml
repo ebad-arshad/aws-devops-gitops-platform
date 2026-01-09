@@ -1,6 +1,5 @@
 resources:
   - ../../../../base/postgres/order-db
-  - ../../common
 
 patches:
   - path: patch.yaml
@@ -11,3 +10,4 @@ secretGenerator:
     - POSTGRES_USER=user
     - POSTGRES_PASSWORD=password
     - POSTGRES_DB=order
+namePrefix: dev-
