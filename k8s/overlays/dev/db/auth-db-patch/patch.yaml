@@ -8,6 +8,7 @@ spec:
     spec:
       containers:
         - name: auth-db
+          image: postgres:alpine3.19
           resources:
             requests:
               cpu: "250m"
