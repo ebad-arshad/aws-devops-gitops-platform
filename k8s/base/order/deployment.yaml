@@ -21,15 +21,6 @@ spec:
       labels:
         app: order
     spec:
-      initContainers:
-        - name: wait-for-db
-          image: busybox:1.28
-          command:
-            [
-              "sh",
-              "-c",
-              "until nc -zv dev-order-db-service 5432; do echo waiting for db; sleep 2; done;",
-            ]
       containers:
         - name: order
           image: ebadarshad/ecommerce-order

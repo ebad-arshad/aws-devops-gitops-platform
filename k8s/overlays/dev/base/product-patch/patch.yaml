@@ -6,6 +6,15 @@ spec:
   replicas: 1
   template:
     spec:
+      initContainers:
+        - name: wait-for-db
+          image: busybox:1.28
+          command:
+            [
+              "sh",
+              "-c",
+              "until nc -zv dev-product-db-service 5432; do echo waiting for db; sleep 2; done;",
+            ]
       containers:
         - name: product
           image: ebadarshad/ecommerce-product:1.0.107
