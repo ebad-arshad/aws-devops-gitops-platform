@@ -1,6 +1,9 @@
 resources:
   - ../../../../base/rabbitmq
 
+patches:
+  - path: patch.yaml
+
 secretGenerator:
 - name: rabbitmq-secret
   literals:
