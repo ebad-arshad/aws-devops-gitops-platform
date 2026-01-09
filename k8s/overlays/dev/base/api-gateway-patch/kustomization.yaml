@@ -1,6 +1,6 @@
 resources:
   - ../../../../base/api-gateway
-  
+  - ../../common
 patches:
   - path: patch.yaml
 
@@ -10,4 +10,3 @@ secretGenerator:
     - AUTH_URL=http://dev-auth-service:5001
     - PRODUCT_URL=http://dev-product-service:5002
     - ORDER_URL=http://dev-order-service:5003
-namePrefix: dev-

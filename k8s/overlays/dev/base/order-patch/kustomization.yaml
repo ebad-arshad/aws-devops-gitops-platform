@@ -1,5 +1,6 @@
 resources:
   - ../../../../base/order
+  - ../../common
 
 patches:
   - path: patch.yaml
@@ -15,4 +16,3 @@ secretGenerator:
     - RABBITMQ_ORDER_QUEUE=order
     - PRODUCT_URL=http://dev-product-service:5002
     - RABBITMQ_URL=amqp://dev-rabbitmq-service:5672
-namePrefix: dev-

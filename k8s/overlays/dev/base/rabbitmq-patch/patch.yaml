@@ -18,11 +18,13 @@ spec:
               memory: "512Mi"
           readinessProbe:
             exec:
-              command: ["rabbitmq-diagnostics", "check_port_connectivity"]
-            initialDelaySeconds: 10
+              command: ["rabbitmq-diagnostics", "-q", "check_port_connectivity"]
+            initialDelaySeconds: 20 # Give RabbitMQ 20s to start up first
             periodSeconds: 10
+            timeoutSeconds: 5      # Increased from 1s to 5s
           livenessProbe:
             exec:
-              command: ["rabbitmq-diagnostics", "check_port_connectivity"]
-            initialDelaySeconds: 15
-            periodSeconds: 10
+              command: ["rabbitmq-diagnostics", "-q", "check_port_connectivity"]
+            initialDelaySeconds: 30 # Wait longer before killing the pod
+            periodSeconds: 20
+            timeoutSeconds: 5      # Increased from 1s to 5s
