@@ -10,3 +10,4 @@ secretGenerator:
     - POSTGRES_USER=user
     - POSTGRES_PASSWORD=password
     - POSTGRES_DB=product
+namePrefix: dev-

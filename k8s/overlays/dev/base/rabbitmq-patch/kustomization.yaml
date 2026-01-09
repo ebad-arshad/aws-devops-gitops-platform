@@ -9,3 +9,4 @@ secretGenerator:
   literals:
     - RABBITMQ_DEFAULT_USER=ebad
     - RABBITMQ_DEFAULT_PASS=password
+namePrefix: dev-

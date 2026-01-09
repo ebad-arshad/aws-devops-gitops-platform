@@ -14,3 +14,4 @@ secretGenerator:
     - RABBITMQ_PRODUCT_QUEUE=product
     - RABBITMQ_ORDER_QUEUE=order
     - RABBITMQ_URL=amqp://dev-rabbitmq-service:5672
+namePrefix: dev-
