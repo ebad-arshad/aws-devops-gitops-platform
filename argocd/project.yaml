@@ -12,7 +12,7 @@ spec:
   - 'https://github.com/ebad-arshad/aws-devops-gitops-platform'
   # Only permit applications to deploy to specific destination clusters and namespaces
   destinations:
-  # - namespace: argocd  # Add this so the master app can create child apps!
-  #   server: https://kubernetes.default.svc
+  - namespace: argocd  # Add this so the master app can create child apps!
+    server: https://kubernetes.default.svc
   - namespace: ecommerce-dev # can be a specific namespace
     server: https://kubernetes.default.svc # or the cluster URL
