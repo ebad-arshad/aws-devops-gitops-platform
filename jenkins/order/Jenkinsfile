@@ -126,7 +126,7 @@ pipeline {
                             // 2️⃣ Modify manifest
                             sh """
                                 sed -i 's|${IMAGE_NAME}:[^ ]*|${IMAGE_NAME}:${env.VERSION}|g' ${env.APP_NAME}-patch/patch.yaml
-                                git add ${env.APP_NAME}-patch.yaml
+                                git add ${env.APP_NAME}-patch/patch.yaml
                             """
 
                             // 3️⃣ Commit only if needed
