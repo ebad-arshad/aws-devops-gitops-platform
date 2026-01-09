@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: ecommerce-project-dev
+  namespace: argocd # Projects must be created in the Argo CD namespace
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io # Ensures project is not deleted while applications still reference it
+spec:
+  description: This ecommerce project will be for development environment
+  # Allow manifests to deploy from any Git repos, or specify a list of allowed repo URLs
+  sourceRepos:
+  - 'https://github.com/ebad-arshad/aws-devops-gitops-platform'
+  # Only permit applications to deploy to specific destination clusters and namespaces
+  destinations:
+  - namespace: argocd  # Add this so the master app can create child apps!
+    server: https://kubernetes.default.svc
+  - namespace: ecommerce-dev # can be a specific namespace
+    server: https://kubernetes.default.svc # or the cluster URL

@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: api-gateway-application # The name of the Argo CD Application resource
+  namespace: argocd # The namespace where Argo CD is installed
+spec:
+  project: ecommerce-project-dev # The Argo CD project the application belongs to
+  source:
+    repoURL: https://github.com/argoproj/argocd-example-apps # The Git repository URL
+    targetRevision: master # The branch/tag/commit to sync from
+    path: k8s/overlays/dev/base # The path within the repo containing Kubernetes manifests
+    directory:
+      # Use a glob pattern to include only the desired file(s)
+      include: 'apl.yaml'
+  destination:
+    server: https://kubernetes.default.svc # The target Kubernetes cluster API server
+    namespace: ecommerce-dev # The target namespace for deployment

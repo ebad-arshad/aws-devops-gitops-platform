@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ecommerce
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: argocd
+    server: https://kubernetes.default.svc
+  project: ecommerce-project-dev
+  source:
+    path: argocd/applications
+    repoURL: https://github.com/argoproj/argocd-example-apps
+    targetRevision: master
+    directory:
+      recurse: true
+  syncPolicy:
+      automated:
+        prune: true
+        selfHeal: true

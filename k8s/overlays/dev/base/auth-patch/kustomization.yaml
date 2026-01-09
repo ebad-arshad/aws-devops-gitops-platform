@@ -1,0 +1,13 @@
+resources:
+  - ../../../../base/auth
+
+patches:
+  - path: patch.yaml
+
+secretGenerator:
+- name: auth-secret
+  literals:
+    - POSTGRES_HOST=dev-auth-db-service
+    - POSTGRES_USER=user
+    - POSTGRES_PASSWORD=password
+    - POSTGRES_DB=auth

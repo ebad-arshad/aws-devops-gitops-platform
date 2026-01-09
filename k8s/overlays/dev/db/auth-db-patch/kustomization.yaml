@@ -1,0 +1,12 @@
+resources:
+  - ../../../../base/postgres/auth-db
+
+patches:
+  - path: patch.yaml
+
+secretGenerator:
+- name: auth-db-secret
+  literals:
+    - POSTGRES_USER=user
+    - POSTGRES_PASSWORD=password
+    - POSTGRES_DB=auth
