@@ -51,8 +51,15 @@ resource "aws_security_group" "k3s_sg" {
   vpc_id = var.vpc.id
 
   ingress {
-    from_port       = 80
-    to_port         = 80
+    from_port       = 30001
+    to_port         = 30001
+    protocol        = "tcp"
+    security_groups = [aws_security_group.alb_sg.id]
+  }
+
+  ingress {
+    from_port       = 6443
+    to_port         = 6443
     protocol        = "tcp"
     security_groups = [aws_security_group.alb_sg.id]
   }

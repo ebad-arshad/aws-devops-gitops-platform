@@ -23,13 +23,24 @@ echo "# ++++++++++++++++++++++ K3S INSTALL BEGIN ++++++++++++++++++++++"
 curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server --disable traefik --write-kubeconfig-mode 644" sh -
 echo "# ++++++++++++++++++++++ K3S INSTALL END ++++++++++++++++++++++"
 
+export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+
+echo "# ++++++++++++++++++++++ SLEEP 30 SECONDS ++++++++++++++++++++++"
+sleep 30
+
 echo "# ++++++++++++++++++++++ K3S NODE OUPUT BEGIN ++++++++++++++++++++++"
+
+echo "Waiting for K3s to be ready..."
+until kubectl get nodes | grep -q "Ready"; do
+  sleep 5
+done
+
 echo "$(kubectl get nodes)"
 echo "# ++++++++++++++++++++++ K3S NODE OUPUT END ++++++++++++++++++++++"
 
 echo "# ++++++++++++++++++++++ CREATING DEPLOYMENT.YAML ++++++++++++++++++++++"
 echo "# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-cat <<EOT > /home/ubuntu/deployment.yaml
+cat <<EOT > /tmp/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -54,7 +65,7 @@ EOT
 echo "# ++++++++++++++++++++++ CREATING SERVICE.YAML ++++++++++++++++++++++"
 echo "# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 
-cat <<EOT > /home/ubuntu/service.yaml
+cat <<EOT > /tmp/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -71,10 +82,13 @@ spec:
 EOT
 
 echo "# ++++++++++++++++++++++ CREATING NAMESPACE, DEPLOYMENT, SERVICE ++++++++++++++++++++++"
-echo "$(kubectl create ns nginx)"
-echo "$(kubectl apply -f /home/ubuntu/service.yaml -n nginx)"
-echo "$(kubectl apply -f /home/ubuntu/deployment.yaml -n nginx)"
+echo "$(kubectl create ns nginx || true)"
+echo "$(kubectl apply -f /tmp/service.yaml -n nginx)"
+echo "$(kubectl apply -f /tmp/deployment.yaml -n nginx)"
 echo "# ++++++++++++++++++++++ CREATED NAMESPACE, DEPLOYMENT, SERVICE ++++++++++++++++++++++"
+
+echo "# ++++++++++++++++++++++ SLEEP 30 SECONDS ++++++++++++++++++++++"
+sleep 30
 
 echo "# ++++++++++++++++++++++ NGINX OUPUT BEGIN ++++++++++++++++++++++"
 echo "$(kubectl get all -n nginx)"

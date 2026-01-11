@@ -12,12 +12,20 @@ resource "aws_lb" "alb" {
 # Target Group for the Ecommerce App (K3s)
 resource "aws_lb_target_group" "k3s_tg" {
   name     = "k3s-tg-${terraform.workspace}"
-  port     = 80
+  port     = 30001
   protocol = "HTTP" # App runs HTTP
   vpc_id   = var.vpc.id
 
   health_check {
-    path = "/login" # Ensure your app responds here
+    # Match the port here as well
+    port                = "30001"
+    path                = "/"
+    protocol            = "HTTP"
+    matcher             = "200-399"
+    interval            = 30
+    timeout             = 5
+    healthy_threshold   = 3
+    unhealthy_threshold = 3
   }
 
   tags = {
@@ -30,11 +38,13 @@ resource "aws_lb_target_group" "k3s_tg" {
 resource "aws_lb_target_group" "jenkins_tg" {
   name     = "jenkins-tg-${terraform.workspace}"
   port     = 8080
-  protocol = "HTTP" # Jenkins runs HTTP
+  protocol = "HTTP"
   vpc_id   = var.vpc.id
 
   health_check {
-    path = "/jenkins/login"
+    path    = "/jenkins/login"
+    port    = "8080"
+    matcher = "200-399"
   }
 
   tags = {
@@ -46,13 +56,13 @@ resource "aws_lb_target_group" "jenkins_tg" {
 resource "aws_lb_target_group_attachment" "jenkins_attach" {
   target_group_arn = aws_lb_target_group.jenkins_tg.arn
   target_id        = var.jenkins_instance.id
-  port             = 8080 # Jenkins default port
+  port             = 8080
 }
 
 resource "aws_lb_target_group_attachment" "k3s_attach" {
   target_group_arn = aws_lb_target_group.k3s_tg.arn
   target_id        = var.k3s_instance.id
-  port             = 80 # k3s default port
+  port             = 30001
 }
 
 resource "aws_lb_listener" "https_listener" {

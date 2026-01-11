@@ -67,7 +67,7 @@ echo "# ++++++++++++++++++++++ SYSTEMCTL STATUS JENKINS BEGIN ++++++++++++++++++
 systemctl status jenkins
 echo "# ++++++++++++++++++++++ SYSTEMCTL STATUS JENKINS END ++++++++++++++++++++++"
 
-echo "# ++++++++++++++++++++++ SLEEP 30 Seconds ++++++++++++++++++++++"
+echo "# ++++++++++++++++++++++ SLEEP 30 SECONDS ++++++++++++++++++++++"
 sleep 30
 
 echo "# ++++++++++++++++++++++ JENKINS DEFAULT PASSWORD BEGIN ++++++++++++++++++++++"
