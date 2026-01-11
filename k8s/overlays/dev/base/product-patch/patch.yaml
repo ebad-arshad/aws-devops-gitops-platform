@@ -20,8 +20,8 @@ spec:
           image: ebadarshad/ecommerce-product:1.0.126
           resources:
             requests:
-              cpu: "250m"
-              memory: "256Mi"
+              cpu: "50m"
+              memory: "128Mi" 
             limits:
-              cpu: "500m"
-              memory: "512Mi"
+              cpu: "200m" 
+              memory: "256Mi"
