@@ -14,6 +14,20 @@ proxy.on('proxyReq', function (proxyReq, req, _res, _options) {
   }
 });
 
+// Health check 
+app.get('/healthz', (req, res) => {
+  const healthcheck = {
+    uptime: process.uptime(),
+    message: 'OK',
+    timestamp: Date.now()
+  };
+  try {
+    res.status(200).send(healthcheck);
+  } catch (error) {
+    res.status(503).send({ message: 'Service Unavailable' });
+  }
+});
+
 // Route requests to the auth service
 app.use("/auth", (req, res) => {
   proxy.web(req, res, { target: config.authUrl });
