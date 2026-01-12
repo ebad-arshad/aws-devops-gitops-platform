@@ -108,6 +108,7 @@ echo "# ++++++++++++++++++++++ NGINX OUPUT END ++++++++++++++++++++++"
 
 
 
+# #!/bin/bash
 
 # sleep 30
 
@@ -147,8 +148,8 @@ echo "# ++++++++++++++++++++++ NGINX OUPUT END ++++++++++++++++++++++"
 # echo "$(kubectl get nodes)"
 # echo "# ++++++++++++++++++++++ K3S NODE OUPUT END ++++++++++++++++++++++"
 
-# kubectl create namespace argocd
-# kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+# kubectl create ns argocd
+# kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v3.2.3/manifests/core-install.yaml
 
 # sleep 60
 
