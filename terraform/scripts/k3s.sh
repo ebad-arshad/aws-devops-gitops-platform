@@ -107,7 +107,6 @@ echo "# ++++++++++++++++++++++ NGINX OUPUT END ++++++++++++++++++++++"
 
 
 
-
 # #!/bin/bash
 
 # sleep 30
@@ -149,9 +148,11 @@ echo "# ++++++++++++++++++++++ NGINX OUPUT END ++++++++++++++++++++++"
 # echo "# ++++++++++++++++++++++ K3S NODE OUPUT END ++++++++++++++++++++++"
 
 # kubectl create ns argocd
-# kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v3.2.3/manifests/core-install.yaml
+# kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 
 # sleep 60
+
+# kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "NodePort", "ports": [{"port": 80, "nodePort": 30001}]}}'
 
 # echo "# ++++++++++++++++++++++ ARGOCD OUPUT BEGIN ++++++++++++++++++++++"
 # echo "$(kubectl get all -n argocd)"
@@ -161,4 +162,6 @@ echo "# ++++++++++++++++++++++ NGINX OUPUT END ++++++++++++++++++++++"
 # kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
 # echo "# ++++++++++++++++++++++ ARGOCD PASSWORD END ++++++++++++++++++++++"
 
-# kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "NodePort", "ports": [{"port": 80, "nodePort": 30001}]}}'
+# echo "$(kubectl apply -f https://raw.githubusercontent.com/ebad-arshad/aws-devops-gitops-platform/master/argocd/project.yaml -n argocd)"
+
+# echo "$(kubectl apply -f https://raw.githubusercontent.com/ebad-arshad/aws-devops-gitops-platform/master/argocd/app-of-apps.yaml -n argocd)"

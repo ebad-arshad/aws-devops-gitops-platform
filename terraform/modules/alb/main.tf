@@ -9,7 +9,7 @@ resource "aws_lb" "alb" {
   }
 }
 
-# Target Group for the Ecommerce App (K3s)
+# Target Group for the ArgoCD (K3s)
 resource "aws_lb_target_group" "k3s_tg" {
   name     = "k3s-tg-${terraform.workspace}"
   port     = 30001
@@ -31,6 +31,20 @@ resource "aws_lb_target_group" "k3s_tg" {
   tags = {
     Name        = "ALB-K3S-TG-${terraform.workspace}"
     Environment = terraform.workspace
+  }
+}
+
+# Target Group for App
+resource "aws_lb_target_group" "api_gate_tg" {
+  name     = "api-gate-tg-${terraform.workspace}"
+  port     = 30002
+  protocol = "HTTP"
+  vpc_id   = var.vpc.id
+
+  health_check {
+    port     = "30002"
+    path     = "api/healthz" # Or the specific health check your API uses
+    matcher  = "200-399"
   }
 }
 
@@ -63,6 +77,12 @@ resource "aws_lb_target_group_attachment" "k3s_attach" {
   target_group_arn = aws_lb_target_group.k3s_tg.arn
   target_id        = var.k3s_instance.id
   port             = 30001
+}
+
+resource "aws_lb_target_group_attachment" "api_gate_attach" {
+  target_group_arn = aws_lb_target_group.api_gate_tg.arn
+  target_id        = var.k3s_instance.id
+  port             = 30002
 }
 
 resource "aws_lb_listener" "https_listener" {
@@ -101,5 +121,21 @@ resource "aws_lb_listener_rule" "jenkins_rule" {
   tags = {
     Name        = "Jenkins-Listener-${terraform.workspace}"
     Environment = terraform.workspace
+  }
+}
+
+resource "aws_lb_listener_rule" "api_gate_rule" {
+  listener_arn = aws_lb_listener.https_listener.arn
+  priority     = 90 # Higher priority than the default (lower number = higher priority)
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.api_gate_tg.arn
+  }
+
+  condition {
+    path_pattern {
+      values = ["/api*"]
+    }
   }
 }

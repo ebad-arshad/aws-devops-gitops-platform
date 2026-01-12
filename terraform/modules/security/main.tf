@@ -52,11 +52,11 @@ resource "aws_security_group" "k3s_sg" {
 
   ingress {
     from_port       = 30001
-    to_port         = 30001
+    to_port         = 30002
     protocol        = "tcp"
     security_groups = [aws_security_group.alb_sg.id]
+    description     = "Allow ALB to reach K3s NodePorts and Argocd"
   }
-
   ingress {
     from_port       = 6443
     to_port         = 6443
