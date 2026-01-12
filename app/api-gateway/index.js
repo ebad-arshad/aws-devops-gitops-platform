@@ -15,7 +15,7 @@ proxy.on('proxyReq', function (proxyReq, req, _res, _options) {
 });
 
 // Health check 
-app.get('/api/healthz', (req, res) => {
+app.get('/apis/healthz', (req, res) => {
   const healthcheck = {
     uptime: process.uptime(),
     message: 'OK',
@@ -29,24 +29,24 @@ app.get('/api/healthz', (req, res) => {
 });
 
 // Route requests to the auth service
-app.use("/api/auth", (req, res) => {
+app.use("/apis/auth", (req, res) => {
   proxy.web(req, res, { target: config.authUrl });
 });
 
 // Route requests to the product service
 // Allow both buyer and seller to view products
-app.use("/api/product/view", authMiddleware, (req, res) => {
+app.use("/apis/product/view", authMiddleware, (req, res) => {
   proxy.web(req, res, { target: `${config.productUrl}/view` });
 });
 
 // Allow only seller to update products
-app.use("/api/product", authMiddleware, roleMiddleware("seller"), (req, res) => {
+app.use("/apis/product", authMiddleware, roleMiddleware("seller"), (req, res) => {
   proxy.web(req, res, { target: config.productUrl });
 });
 
 // Route requests to the order service
 // Allow only buyer to order
-app.use("/api/order", authMiddleware, roleMiddleware("buyer"), (req, res) => {
+app.use("/apis/order", authMiddleware, roleMiddleware("buyer"), (req, res) => {
   proxy.web(req, res, { target: config.orderUrl });
 });
 

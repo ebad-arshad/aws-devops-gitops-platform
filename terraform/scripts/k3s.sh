@@ -1,6 +1,9 @@
 #!/bin/bash
 
-sleep 30
+until ping -c 1 google.com; do
+  echo "Waiting for internet..."
+  sleep 5
+done
 
 echo "# ++++++++++++++++++++++ APT UPDATE BEGIN ++++++++++++++++++++++"
 apt update
@@ -38,61 +41,31 @@ done
 echo "$(kubectl get nodes)"
 echo "# ++++++++++++++++++++++ K3S NODE OUPUT END ++++++++++++++++++++++"
 
-echo "# ++++++++++++++++++++++ CREATING DEPLOYMENT.YAML ++++++++++++++++++++++"
-echo "# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-cat <<EOT > /tmp/deployment.yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nginx
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: nginx
-  template:
-    metadata:
-      labels:
-        app: nginx
-    spec:
-      containers:
-      - name: nginx
-        image: nginx:1.14.2
-        ports:
-        - containerPort: 80
-EOT
+kubectl create ns argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 
-echo "# ++++++++++++++++++++++ CREATING SERVICE.YAML ++++++++++++++++++++++"
-echo "# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+sleep 60
 
-cat <<EOT > /tmp/service.yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: nginx-service
-spec:
-  type: NodePort
-  selector:
-    app: nginx
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 80
-      nodePort: 30001
-EOT
+kubectl patch cm argocd-cmd-params-cm -n argocd -p '{"data": {"server.insecure": "true"}}'
+kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "NodePort", "ports": [{"port": 80, "nodePort": 30001}]}}'
+kubectl rollout restart deployment argocd-server -n argocd
 
-echo "# ++++++++++++++++++++++ CREATING NAMESPACE, DEPLOYMENT, SERVICE ++++++++++++++++++++++"
-echo "$(kubectl create ns nginx || true)"
-echo "$(kubectl apply -f /tmp/service.yaml -n nginx)"
-echo "$(kubectl apply -f /tmp/deployment.yaml -n nginx)"
-echo "# ++++++++++++++++++++++ CREATED NAMESPACE, DEPLOYMENT, SERVICE ++++++++++++++++++++++"
+echo "# ++++++++++++++++++++++ ARGOCD OUPUT BEGIN ++++++++++++++++++++++"
+echo "$(kubectl get all -n argocd)"
+echo "# ++++++++++++++++++++++ ARGOCD OUPUT END ++++++++++++++++++++++"
 
-echo "# ++++++++++++++++++++++ SLEEP 30 SECONDS ++++++++++++++++++++++"
-sleep 30
+echo "# ++++++++++++++++++++++ ARGOCD PASSWORD END ++++++++++++++++++++++"
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
+echo "# ++++++++++++++++++++++ ARGOCD PASSWORD END ++++++++++++++++++++++"
 
-echo "# ++++++++++++++++++++++ NGINX OUPUT BEGIN ++++++++++++++++++++++"
-echo "$(kubectl get all -n nginx)"
-echo "# ++++++++++++++++++++++ NGINX OUPUT END ++++++++++++++++++++++"
+echo "$(kubectl apply -f https://raw.githubusercontent.com/ebad-arshad/aws-devops-gitops-platform/master/argocd/project.yaml -n argocd)"
+
+echo "$(kubectl apply -f https://raw.githubusercontent.com/ebad-arshad/aws-devops-gitops-platform/master/argocd/app-of-apps.yaml -n argocd)"
+
+sleep 60
+
+echo "$(kubectl get all -n ecommerce-dev)"
+
 
 
 
@@ -147,21 +120,58 @@ echo "# ++++++++++++++++++++++ NGINX OUPUT END ++++++++++++++++++++++"
 # echo "$(kubectl get nodes)"
 # echo "# ++++++++++++++++++++++ K3S NODE OUPUT END ++++++++++++++++++++++"
 
-# kubectl create ns argocd
-# kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+# echo "# ++++++++++++++++++++++ CREATING DEPLOYMENT.YAML ++++++++++++++++++++++"
+# echo "# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+# cat <<EOT > /tmp/deployment.yaml
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: nginx
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: nginx
+#   template:
+#     metadata:
+#       labels:
+#         app: nginx
+#     spec:
+#       containers:
+#       - name: nginx
+#         image: nginx:1.14.2
+#         ports:
+#         - containerPort: 80
+# EOT
 
-# sleep 60
+# echo "# ++++++++++++++++++++++ CREATING SERVICE.YAML ++++++++++++++++++++++"
+# echo "# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 
-# kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "NodePort", "ports": [{"port": 80, "nodePort": 30001}]}}'
+# cat <<EOT > /tmp/service.yaml
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: nginx-service
+# spec:
+#   type: NodePort
+#   selector:
+#     app: nginx
+#   ports:
+#     - protocol: TCP
+#       port: 80
+#       targetPort: 80
+#       nodePort: 30001
+# EOT
 
-# echo "# ++++++++++++++++++++++ ARGOCD OUPUT BEGIN ++++++++++++++++++++++"
-# echo "$(kubectl get all -n argocd)"
-# echo "# ++++++++++++++++++++++ ARGOCD OUPUT END ++++++++++++++++++++++"
+# echo "# ++++++++++++++++++++++ CREATING NAMESPACE, DEPLOYMENT, SERVICE ++++++++++++++++++++++"
+# echo "$(kubectl create ns nginx || true)"
+# echo "$(kubectl apply -f /tmp/service.yaml -n nginx)"
+# echo "$(kubectl apply -f /tmp/deployment.yaml -n nginx)"
+# echo "# ++++++++++++++++++++++ CREATED NAMESPACE, DEPLOYMENT, SERVICE ++++++++++++++++++++++"
 
-# echo "# ++++++++++++++++++++++ ARGOCD PASSWORD END ++++++++++++++++++++++"
-# kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
-# echo "# ++++++++++++++++++++++ ARGOCD PASSWORD END ++++++++++++++++++++++"
+# echo "# ++++++++++++++++++++++ SLEEP 30 SECONDS ++++++++++++++++++++++"
+# sleep 30
 
-# echo "$(kubectl apply -f https://raw.githubusercontent.com/ebad-arshad/aws-devops-gitops-platform/master/argocd/project.yaml -n argocd)"
-
-# echo "$(kubectl apply -f https://raw.githubusercontent.com/ebad-arshad/aws-devops-gitops-platform/master/argocd/app-of-apps.yaml -n argocd)"
+# echo "# ++++++++++++++++++++++ NGINX OUPUT BEGIN ++++++++++++++++++++++"
+# echo "$(kubectl get all -n nginx)"
+# echo "# ++++++++++++++++++++++ NGINX OUPUT END ++++++++++++++++++++++"

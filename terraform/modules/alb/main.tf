@@ -43,7 +43,7 @@ resource "aws_lb_target_group" "api_gate_tg" {
 
   health_check {
     port     = "30002"
-    path     = "api/healthz" # Or the specific health check your API uses
+    path     = "/apis/healthz" # Or the specific health check your API uses
     matcher  = "200-399"
   }
 }
@@ -135,7 +135,7 @@ resource "aws_lb_listener_rule" "api_gate_rule" {
 
   condition {
     path_pattern {
-      values = ["/api*"]
+      values = ["/apis*"]
     }
   }
 }

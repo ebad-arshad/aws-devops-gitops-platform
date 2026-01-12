@@ -1,6 +1,9 @@
 #!/bin/bash
 
-sleep 30
+until ping -c 1 google.com; do
+  echo "Waiting for internet..."
+  sleep 5
+done
 
 echo "# ++++++++++++++++++++++ APT UPDATE BEGIN ++++++++++++++++++++++"
 apt update
