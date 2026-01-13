@@ -1,0 +1,6 @@
+resources:
+  - auth-patch
+  - product-patch
+  - order-patch
+  - api-gateway-patch
+  - rabbitmq-patch

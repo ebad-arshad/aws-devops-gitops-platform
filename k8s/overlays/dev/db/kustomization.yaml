@@ -1,0 +1,4 @@
+resources:
+  - auth-db-patch
+  - product-db-patch
+  - order-db-patch
