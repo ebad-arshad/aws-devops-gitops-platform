@@ -1,3 +1,3 @@
 variable "region" {
-  default = "your_region"
+  default = "ap-south-1"
 }
