@@ -66,3 +66,14 @@ To replicate this environment, please follow the documentation in order:
 * Achieved **"Infrastructure-as-Code"** with Terraform Workspaces for environment isolation.
 * Secured the build pipeline with **Trivy** container scanning.
 * Established a **Pull-based CD model** using ArgoCD to eliminate manual `kubectl` intervention.
+
+---
+
+## 📜 Credits & Attribution
+
+This project is a customized implementation and enhancement of the microservices architecture originally developed by:
+
+**Author:** [hmn53](https://github.com/hmn53)  
+**Original Repository:** [ecommerce-microservice](https://github.com/hmn53/ecommerce-microservice)
+
+*Modifications include the integration of Terraform Workspaces, a Multi-AZ AWS architecture, ArgoCD, Kubernetes setup and a Jenkins Controller-Agent setup with Trivy security integration.*
