@@ -15,6 +15,15 @@ Before starting the setup, ensure the following requirements are met:
 
 ---
 
+### **Initial Jenkins Unlock**
+If you are accessing a fresh installation:
+1. Browse to `http://localhost:8080` (or the specific port you configured) and wait for the **Unlock Jenkins** page to appear.
+2. To retrieve the administrator password, run the following command on your Jenkins server:
+   ```bash
+   sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+
+---
+
 ## 🚀 Step-by-Step Pipeline Configuration
 
 ### 1. Create the Pipeline Job
