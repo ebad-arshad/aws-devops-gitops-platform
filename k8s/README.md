@@ -1,35 +1,3 @@
-K8s for microservices
-
-intro read the info below first to write the intro here
-
-features
-kustomization
-base/ and overlays/ directories for environment seperation
-api-gateway auth product order services have deployment service and kustomization
-api-gateway-db auth-db product-db order-db services have statefulset service and kustomization
-rabbitmq have statefulset service and kustomization
-secrets are mananged in overlays by secretGenerator
-argocd running this code
-
-add points/things you want to add
-
-pods are following rolling update 
-revisionHistoryLimit: 2
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 0
-      liveness readiness probes
-      resource req limit
-      replicas 
-outro
-
-
-
-
-
-
-
-
 # ☸️ Kubernetes Orchestration (Kustomize)
 
 This directory houses the Kubernetes manifests for the ecommerce microservices ecosystem. We utilize **Kustomize** to implement a robust "Base and Overlay" strategy, enabling environment-specific configurations while maintaining a DRY (Don't Repeat Yourself) codebase.
