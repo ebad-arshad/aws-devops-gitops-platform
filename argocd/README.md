@@ -1,29 +1,3 @@
-Microservices CD through ArgoCD
-
-introduction
-this project follows app of apps by which the microservices under applications/ are run in argocd
-
-Key Features:
-app of apps
-drift detection
-stores 2 revision
-self heal
-auto update following gitops principle
-
-why used argocd instead of jenkins
-setup is hard doing in jenkins because kubernetes don't default allow outside service to talk to it
-good tool for CD
-
-ending
-
-
-
-
-
-
-
-
-
 # 🎡 Continuous Deployment with ArgoCD (GitOps)
 
 This directory contains the GitOps configuration for the ecommerce platform. By using ArgoCD, we ensure that the state of our Kubernetes cluster always matches the desired state defined in our Git repository.
