@@ -27,3 +27,9 @@ terraform workspace new dev
 3. **Apply Configuration:**
    ```bash
    terraform apply -auto-approve
+
+## Note
+
+**Once you are done with trying this out make sure to run the command below to destroy the infrastructure otherwise AWS will keep charging you for the services**
+   ```bash
+   terraform destroy -auto-approve
