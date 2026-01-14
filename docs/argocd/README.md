@@ -12,7 +12,14 @@ This documentation covers the Continuous Deployment (CD) phase of the project. B
    kubectl create namespace argocd
    kubectl apply -n argocd -f [https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml](https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml)
 
+---
+
+# Before installation make sure to change repo link in argocd/project.yaml, app-of-apps.yaml and all application.yaml in argocd/applications
+
+---
+
 # 🚀 Installation Steps
+
 
 1. **Verify Pod Status:** Wait until all ArgoCD components are running successfully:
    ```bash
