@@ -76,13 +76,12 @@ pipeline {
             }
         }
 
-        // stage('Security Scan (Code)') {
-            //             when { expression { return env.SHOULD_BUILD == "true" } }
-        //     steps {
-        //         // SAST: Find secrets/vulns in your source code
-        //         sh "trivy fs app/${env.APP_NAME} --severity HIGH,CRITICAL --exit-code 1"
-        //     }
-        // }
+        stage('Security Scan (Code)') {
+            when { expression { return env.SHOULD_BUILD == "true" } }
+            steps {
+                sh "trivy fs app/${env.APP_NAME} --severity HIGH,CRITICAL --exit-code 1"
+            }
+        }
 
         stage('Login DockerHub') {
             when { expression { return env.SHOULD_BUILD == "true" } }
@@ -98,7 +97,7 @@ pipeline {
 
             steps {
                 sh "docker build -t ${env.IMAGE_NAME}:${env.VERSION} app/${env.APP_NAME}/"
-                // sh "trivy image ${env.IMAGE_NAME}:${env.VERSION} --severity HIGH,CRITICAL"
+                sh "trivy image ${env.IMAGE_NAME}:${env.VERSION} --severity HIGH,CRITICAL"
                 sh "docker push ${env.IMAGE_NAME}:${env.VERSION}" 
             }
         }
