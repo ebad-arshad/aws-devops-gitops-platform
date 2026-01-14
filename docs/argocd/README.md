@@ -33,7 +33,5 @@ This documentation covers the Continuous Deployment (CD) phase of the project. B
 6. **Verification:** You will observe the applications being created automatically. After a few moments, all services will reach a "Healthy" and "Synced" status.
 ![working argoCD applicaions](<Screenshot from 2026-01-14 11-25-26.png>)
 
-outro
-
 # 🎯 Conclusion
 ArgoCD is now successfully managing the application lifecycle. Any changes made to the Kubernetes manifests in the repository will be detected and applied to the cluster automatically, maintaining the GitOps "Source of Truth."
