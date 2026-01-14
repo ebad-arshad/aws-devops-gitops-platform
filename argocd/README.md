@@ -68,4 +68,4 @@ The system is configured to store the **last 2 revisions**. This ensures that if
 ## 📖 Setup & Tutorial
 For a detailed guide on installing the ArgoCD operator, configuring the Root Application, and setting up repository secrets, please refer to the documentation in the root `docs` folder:
 
-👉 [ArgoCD Setup Tutorial](../docs/argocd/argocd-setup.md)
+👉 [ArgoCD Setup Tutorial](../docs/argocd/README.md)

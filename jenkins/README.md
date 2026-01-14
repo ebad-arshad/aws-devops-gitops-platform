@@ -36,4 +36,4 @@ This directory contains the pipeline logic for 4 independent microservices. The 
 ## 📖 Detailed Setup & Tutorials
 For a full walkthrough on setting up Jenkins and managing credentials, please refer to the documentation in the root `docs` folder:
 
-👉 [Jenkins Setup Tutorial](../docs/jenkins/jenkins-setup.md)
+👉 [Jenkins Setup Tutorial](../docs/jenkins/README.md)
