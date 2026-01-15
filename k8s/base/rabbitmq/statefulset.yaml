@@ -21,10 +21,14 @@ spec:
               name: amqp
             - containerPort: 15672           
               name: http
+            - containerPort: 15692
+              name: prometheus
           envFrom:
             - secretRef:
                 name: rabbitmq-secret
-
+          env:
+            - name: RABBITMQ_PLUGINS
+              value: "rabbitmq_prometheus"
           volumeMounts:
             - name: rabbit-data              
               mountPath: /var/lib/rabbitmq    
