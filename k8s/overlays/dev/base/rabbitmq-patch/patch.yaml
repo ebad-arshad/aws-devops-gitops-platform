@@ -11,11 +11,11 @@ spec:
           image: rabbitmq:3-management-alpine
           resources:
             requests:
-              cpu: "50m"
-              memory: "128Mi" 
+              cpu: "200m"
+              memory: "256Mi" 
             limits:
-              cpu: "200m" 
-              memory: "256Mi"
+              cpu: "500m" 
+              memory: "512Mi"
           readinessProbe:
             exec:
               command: ["rabbitmq-diagnostics", "-q", "check_port_connectivity"]
