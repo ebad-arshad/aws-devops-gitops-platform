@@ -29,7 +29,7 @@ spec:
   rules:
   - http:
       paths:
-        - path: /dev(/|$)(.*)
+        - path: /prod(/|$)(.*)
           pathType: ImplementationSpecific
           backend:
             service:

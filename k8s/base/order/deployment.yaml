@@ -21,6 +21,16 @@ spec:
       labels:
         app: order
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - k3d-cluster-agent-0
+                - k3d-cluster-agent-1
       containers:
         - name: order
           image: ebadarshad/ecommerce-order

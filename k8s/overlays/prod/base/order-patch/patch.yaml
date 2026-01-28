@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order
+spec:
+  replicas: 2
+  template:
+    spec:
+      initContainers:
+        - name: wait-for-db
+          image: busybox:1.28
+          command:
+            [
+              "sh",
+              "-c",
+              "until nc -zv order-db-service 5432; do echo waiting for db; sleep 2; done;",
+            ]
+      containers:
+        - name: order
+          image: ebadarshad/ecommerce-order:1.0.125
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "128Mi" 
+            limits:
+              cpu: "200m" 
+              memory: "256Mi"

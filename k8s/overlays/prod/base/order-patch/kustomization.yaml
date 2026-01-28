@@ -1,0 +1,17 @@
+resources:
+  - ../../../../base/order
+
+patches:
+  - path: patch.yaml
+
+secretGenerator:
+- name: order-secret
+  literals:
+    - POSTGRES_HOST=order-db-service
+    - POSTGRES_USER=user
+    - POSTGRES_PASSWORD=password
+    - POSTGRES_DB=order
+    - RABBITMQ_PRODUCT_QUEUE=product
+    - RABBITMQ_ORDER_QUEUE=order
+    - PRODUCT_URL=http://product-service:5002
+    - RABBITMQ_URL=amqp://rabbitmq-service:5672

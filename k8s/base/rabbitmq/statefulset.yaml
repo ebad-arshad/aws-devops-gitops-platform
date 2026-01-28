@@ -13,6 +13,16 @@ spec:
       labels:
         app: rabbitmq
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - k3d-cluster-agent-0
+                - k3d-cluster-agent-1
       containers:
         - name: rabbitmq
           image: rabbitmq
@@ -39,6 +49,7 @@ spec:
     - metadata:
         name: rabbit-data
       spec:
+        storageClassName: local-path-retain
         accessModes: ["ReadWriteOnce"]
         resources:
           requests:
@@ -46,6 +57,7 @@ spec:
     - metadata:
         name: rabbit-log
       spec:
+        storageClassName: local-path-retain
         accessModes: ["ReadWriteOnce"]
         resources:
           requests:

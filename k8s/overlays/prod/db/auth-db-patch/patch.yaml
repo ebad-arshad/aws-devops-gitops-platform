@@ -7,11 +7,12 @@ spec:
   template:
     spec:
       containers:
-        - name: auth
+        - name: auth-db
+          image: postgres:alpine3.19
           resources:
             requests:
-              cpu: "250m"
-              memory: "256Mi"
+              cpu: "50m"
+              memory: "128Mi" 
             limits:
-              cpu: "500m"
-              memory: "512Mi"
+              cpu: "200m" 
+              memory: "256Mi"

@@ -1,0 +1,11 @@
+resources:
+  - ../../../../base/rabbitmq
+
+patches:
+  - path: patch.yaml
+
+secretGenerator:
+- name: rabbitmq-secret
+  literals:
+    - RABBITMQ_DEFAULT_USER=ebad
+    - RABBITMQ_DEFAULT_PASS=password

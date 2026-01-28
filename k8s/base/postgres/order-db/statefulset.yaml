@@ -14,6 +14,16 @@ spec:
       labels:
         app: order-db
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - k3d-cluster-agent-0
+                - k3d-cluster-agent-1
       terminationGracePeriodSeconds: 10
       containers:
         - name: order-db
@@ -39,11 +49,12 @@ spec:
 
           volumeMounts:
             - name: order-db
-              mountPath: /var/lib/postgresql
+              mountPath: /var/lib/postgresql/data
   volumeClaimTemplates:
     - metadata:
         name: order-db
       spec:
+        storageClassName: local-path-retain
         accessModes: ["ReadWriteOnce"]
         resources:
           requests:

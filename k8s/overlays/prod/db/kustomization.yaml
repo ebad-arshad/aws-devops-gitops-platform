@@ -1,9 +1,5 @@
 resources:
-  - ../../../base/postgres/auth-db
-  - ../../../base/postgres/product-db
-  - ../../../base/postgres/order-db
-
-patches:
-  - path: auth-db-patch.yaml
-  - path: product-db-patch.yaml
-  - path: order-db-patch.yaml
+  - auth-db-patch
+  - product-db-patch
+  - order-db-patch
+  - rabbitmq-patch

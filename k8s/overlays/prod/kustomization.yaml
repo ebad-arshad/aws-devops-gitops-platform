@@ -1,6 +1,7 @@
-namePrefix: prod-
 namespace: ecommerce-prod
 
 resources:
+  # - namespace.yaml
   - base
-  - db
+  # - db
+  # - storage-retain.yaml

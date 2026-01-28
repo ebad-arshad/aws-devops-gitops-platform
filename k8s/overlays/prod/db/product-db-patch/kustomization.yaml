@@ -1,0 +1,12 @@
+resources:
+  - ../../../../base/postgres/product-db
+
+patches:
+  - path: patch.yaml
+
+secretGenerator:
+- name: product-db-secret
+  literals:
+    - POSTGRES_USER=user
+    - POSTGRES_PASSWORD=password
+    - POSTGRES_DB=product

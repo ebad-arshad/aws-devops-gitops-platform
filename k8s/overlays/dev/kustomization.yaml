@@ -1,6 +1,7 @@
 namespace: ecommerce-dev
 
 resources:
+  # - namespace.yaml
   - base
-  - db
-  - namespace.yaml
+  # - db
+  # - storage-retain.yaml

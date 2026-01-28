@@ -3,4 +3,3 @@ resources:
   - product-patch
   - order-patch
   - api-gateway-patch
-  - rabbitmq-patch
