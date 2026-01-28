@@ -1,6 +1,6 @@
-namePrefix: dev-
 namespace: ecommerce-dev
 
 resources:
   - base
   - db
+  - namespace.yaml
