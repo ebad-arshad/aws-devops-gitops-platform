@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: product
 spec:
-  replicas: 2
+  replicas: 1
   template:
     spec:
       initContainers:
@@ -25,3 +25,30 @@ spec:
             limits:
               cpu: "200m" 
               memory: "256Mi"
+
+---
+
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: product-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: product
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 50
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 50
