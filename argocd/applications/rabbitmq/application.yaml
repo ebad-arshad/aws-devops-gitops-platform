@@ -11,7 +11,7 @@ spec:
   source:
     repoURL: https://github.com/ebad-arshad/aws-devops-gitops-platform # The Git repository URL
     targetRevision: master # The branch/tag/commit to sync from
-    path: k8s/overlays/dev/base/rabbitmq-patch # The path within the repo containing Kubernetes manifests
+    path: k8s/overlays/dev/db/rabbitmq-patch # The path within the repo containing Kubernetes manifests
   syncPolicy:
       automated:
         prune: true
