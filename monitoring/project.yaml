@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: grafana-project
+  namespace: argocd # Projects must be created in the Argo CD namespace
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io # Ensures project is not deleted while applications still reference it
+spec:
+  description: This ecommerce project will be for grafana
+  sourceRepos:
+  - 'https://prometheus-community.github.io/helm-charts'
+  destinations:
+  - namespace: argocd
+    server: https://kubernetes.default.svc
+  - namespace: monitoring
+    server: https://kubernetes.default.svc
+  - namespace: kube-system
+    server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+  - group: '*'
+    kind: '*'
