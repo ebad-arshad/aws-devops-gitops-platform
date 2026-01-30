@@ -19,19 +19,19 @@ spec:
             - containerPort: 5000
           startupProbe:
             httpGet:
-              path: /healthz
+              path: /apis/healthz
               port: 5000
             failureThreshold: 15
             periodSeconds: 2
           readinessProbe:
             httpGet:
-              path: /healthz
+              path: /apis/healthz
               port: 5000
             initialDelaySeconds: 5
             periodSeconds: 5
           livenessProbe:
             httpGet:
-              path: /healthz
+              path: /apis/healthz
               port: 5000
             initialDelaySeconds: 10
             periodSeconds: 10
