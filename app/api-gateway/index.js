@@ -32,11 +32,11 @@ app.use("/apis/auth", (req, res) => {
   proxy.web(req, res, { target: config.authUrl });
 });
 
-app.get("/apis/product/healthz", (req, res) => {
+app.use("/apis/product/healthz", (req, res) => {
   proxy.web(req, res, { target: `${config.productUrl}/healthz` });
 });
 
-app.get("/apis/order/healthz", (req, res) => {
+app.use("/apis/order/healthz", (req, res) => {
   proxy.web(req, res, { target: `${config.orderUrl}/healthz` });
 });
 
