@@ -34,8 +34,6 @@ spec:
       containers:
         - name: auth
           image: ebadarshad/ecommerce-auth
-          ports:
-            - containerPort: 5001
 
           securityContext:
             runAsNonRoot: true

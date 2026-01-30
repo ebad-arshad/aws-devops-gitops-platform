@@ -34,8 +34,6 @@ spec:
       containers:
         - name: product
           image: ebadarshad/ecommerce-product
-          ports:
-            - containerPort: 5002
 
           securityContext:
             runAsNonRoot: true

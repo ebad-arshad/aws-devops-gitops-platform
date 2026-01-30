@@ -33,8 +33,7 @@ spec:
       containers:
         - name: api-gateway
           image: ebadarshad/ecommerce-api-gateway
-          ports:
-            - containerPort: 5000
+
 
           securityContext:
             runAsNonRoot: true
