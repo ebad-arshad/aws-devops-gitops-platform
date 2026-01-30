@@ -19,10 +19,10 @@ spec:
           image: ebadarshad/ecommerce-order:1.0.125
           resources:
             requests:
-              cpu: "50m"
-              memory: "128Mi" 
+              cpu: "10m"
+              memory: "56Mi"
             limits:
-              cpu: "200m" 
+              cpu: "100m" 
               memory: "256Mi"
 ---
 
@@ -43,10 +43,10 @@ spec:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: 50
+          averageUtilization: 80
     - type: Resource
       resource:
         name: memory
         target:
           type: Utilization
-          averageUtilization: 50
+          averageUtilization: 70

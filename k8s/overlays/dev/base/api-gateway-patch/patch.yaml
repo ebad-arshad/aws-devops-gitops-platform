@@ -10,10 +10,10 @@ spec:
           image: ebadarshad/ecommerce-api-gateway:health
           resources:
             requests:
-              cpu: "50m"
-              memory: "128Mi" 
+              cpu: "10m"
+              memory: "56Mi"
             limits:
-              cpu: "200m" 
+              cpu: "100m" 
               memory: "256Mi"
 ---
 
@@ -47,7 +47,7 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: api-gateway
-  minReplicas: 2
+  minReplicas: 1
   maxReplicas: 10
   metrics:
     - type: Resource
@@ -55,10 +55,10 @@ spec:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: 50
+          averageUtilization: 80
     - type: Resource
       resource:
         name: memory
         target:
           type: Utilization
-          averageUtilization: 50
+          averageUtilization: 70
