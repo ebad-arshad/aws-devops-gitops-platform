@@ -62,4 +62,4 @@ class MessageBroker {
   }
 }
 
-module.exports = new MessageBroker();
+module.exports = MessageBroker;

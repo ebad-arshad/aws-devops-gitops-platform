@@ -4,7 +4,7 @@ const validateMiddleware = require("./middlewares/validateMiddleware");
 const getUserMiddleware = require("./middlewares/getUserMiddleware");
 const OrderController = require("./controllers/orderController");
 const { orderSchema } = require("./validators/orderValidator");
-const messageBroker = require("./utils/messageBroker");
+const MessageBroker = require("./utils/messageBroker");
 
 class App {
     constructor() {
@@ -20,6 +20,7 @@ class App {
     }
 
     setupMessageBroker() {
+        const messageBroker = new MessageBroker();
         messageBroker.connect();
     }
 
@@ -37,7 +38,7 @@ class App {
             });
         });
         
-        this.app.use(getUserMiddleware);
+        // this.app.use(getUserMiddleware);
         
         this.app.get("/", (req, res) => this.orderController.getOrders(req, res));
         this.app.get("/:id", (req, res) => this.orderController.getOrder(req, res));
