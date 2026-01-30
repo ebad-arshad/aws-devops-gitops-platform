@@ -25,18 +25,20 @@ class App {
 
     setMiddlewares() {
         this.app.use(express.json());
-        this.app.use(getUserMiddleware);
     }
 
     setRoutes() {
         this.app.get("/healthz", (req, res) => {
             res.status(200).send({
                 status: 'OK',
-                service: 'product-service',
+                service: 'order-service',
                 uptime: process.uptime(),
                 timestamp: Date.now()
             });
         });
+        
+        this.app.use(getUserMiddleware);
+        
         this.app.get("/", (req, res) => this.orderController.getOrders(req, res));
         this.app.get("/:id", (req, res) => this.orderController.getOrder(req, res));
         this.app.post("/:productId", validateMiddleware(orderSchema), (req, res) => this.orderController.createOrder(req, res));
