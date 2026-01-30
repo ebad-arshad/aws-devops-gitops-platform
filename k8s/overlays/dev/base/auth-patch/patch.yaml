@@ -31,6 +31,14 @@ kind: HorizontalPodAutoscaler
 metadata:
   name: auth-hpa
 spec:
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 60 
+      policies:
+      - type: Percent
+        value: 100
+        periodSeconds: 15
+      selectPolicy: Max
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
