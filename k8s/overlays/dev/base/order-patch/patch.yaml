@@ -30,7 +30,7 @@ spec:
             httpGet:
               path: /healthz
               port: 5003
-            failureThreshold: 30
+            failureThreshold: 15
             periodSeconds: 2
           readinessProbe:
             httpGet:
