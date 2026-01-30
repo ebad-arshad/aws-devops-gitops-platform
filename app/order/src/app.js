@@ -38,7 +38,7 @@ class App {
             });
         });
         
-        // this.app.use(getUserMiddleware);
+        this.app.use(getUserMiddleware);
         
         this.app.get("/", (req, res) => this.orderController.getOrders(req, res));
         this.app.get("/:id", (req, res) => this.orderController.getOrder(req, res));
