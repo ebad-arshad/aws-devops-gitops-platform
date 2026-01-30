@@ -37,7 +37,7 @@ app.get("/apis/product/healthz", (req, res) => {
 });
 
 app.get("/apis/order/healthz", (req, res) => {
-  proxy.web(req, res, { target: `${config.productUrl}/healthz` });
+  proxy.web(req, res, { target: `${config.orderUrl}/healthz` });
 });
 
 // Route requests to the product service
