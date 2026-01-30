@@ -10,10 +10,10 @@ spec:
           image: ebadarshad/ecommerce-api-gateway:health
           resources:
             requests:
-              cpu: "500m"
+              cpu: "100m"
               memory: "128Mi"
             limits:
-              cpu: "1000m" 
+              cpu: "250m" 
               memory: "256Mi"
           ports:
             - containerPort: 5000
@@ -83,7 +83,7 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: api-gateway
-  minReplicas: 1
+  minReplicas: 2
   maxReplicas: 10
   metrics:
     - type: Resource
