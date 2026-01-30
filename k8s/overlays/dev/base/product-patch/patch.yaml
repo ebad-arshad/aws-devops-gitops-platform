@@ -19,11 +19,32 @@ spec:
           image: ebadarshad/ecommerce-product:health
           resources:
             requests:
-              cpu: "10m"
+              cpu: "100m"
               memory: "128Mi"
             limits:
-              cpu: "100m" 
+              cpu: "500m" 
               memory: "256Mi"
+          ports:
+            - containerPort: 5002
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: 5002
+            failureThreshold: 30
+            periodSeconds: 2
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 5002
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 5002
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            failureThreshold: 3
 ---
 
 apiVersion: autoscaling/v2
@@ -37,7 +58,7 @@ spec:
       policies:
       - type: Pods
         value: 2
-        periodSeconds: 30
+        periodSeconds: 45
       selectPolicy: Max
     scaleDown:
       stabilizationWindowSeconds: 60 
@@ -58,7 +79,7 @@ spec:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: 80
+          averageUtilization: 60
     - type: Resource
       resource:
         name: memory
