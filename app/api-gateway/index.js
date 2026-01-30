@@ -28,9 +28,16 @@ app.get('/apis/healthz', (req, res) => {
   }
 });
 
-// Route requests to the auth service
 app.use("/apis/auth", (req, res) => {
   proxy.web(req, res, { target: config.authUrl });
+});
+
+app.get("/apis/product/healthz", (req, res) => {
+  proxy.web(req, res, { target: `${config.productUrl}/healthz` });
+});
+
+app.get("/apis/order/healthz", (req, res) => {
+  proxy.web(req, res, { target: `${config.productUrl}/healthz` });
 });
 
 // Route requests to the product service

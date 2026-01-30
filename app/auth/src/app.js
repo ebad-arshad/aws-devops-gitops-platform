@@ -19,6 +19,14 @@ class App {
     }
 
     setRoutes() {
+        this.app.get("/healthz", (req, res) => {
+            res.status(200).send({
+                status: 'OK',
+                service: 'product-service',
+                uptime: process.uptime(),
+                timestamp: Date.now()
+            });
+        });
         this.app.post("/login", (req, res) => this.authController.login(req, res));
         this.app.post("/register", (req, res) => this.authController.register(req, res));
     }

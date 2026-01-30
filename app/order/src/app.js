@@ -29,6 +29,14 @@ class App {
     }
 
     setRoutes() {
+        this.app.get("/healthz", (req, res) => {
+            res.status(200).send({
+                status: 'OK',
+                service: 'product-service',
+                uptime: process.uptime(),
+                timestamp: Date.now()
+            });
+        });
         this.app.get("/", (req, res) => this.orderController.getOrders(req, res));
         this.app.get("/:id", (req, res) => this.orderController.getOrder(req, res));
         this.app.post("/:productId", validateMiddleware(orderSchema), (req, res) => this.orderController.createOrder(req, res));
