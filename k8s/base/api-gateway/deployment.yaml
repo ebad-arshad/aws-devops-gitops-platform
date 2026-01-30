@@ -36,17 +36,6 @@ spec:
           ports:
             - containerPort: 5000
 
-          livenessProbe:
-            tcpSocket:
-              port: 5000
-            initialDelaySeconds: 15
-            periodSeconds: 10
-          readinessProbe:
-            tcpSocket:
-              port: 5000
-            initialDelaySeconds: 15
-            periodSeconds: 10
-
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000

@@ -37,17 +37,6 @@ spec:
           ports:
             - containerPort: 5002
 
-          livenessProbe:
-            tcpSocket:
-              port: 5002
-            initialDelaySeconds: 15
-            periodSeconds: 10
-          readinessProbe:
-            tcpSocket:
-              port: 5002
-            initialDelaySeconds: 15
-            periodSeconds: 10
-
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000
