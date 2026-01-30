@@ -44,6 +44,13 @@ metadata:
   name: api-gateway-hpa
 spec:
   behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 0 
+      policies:
+      - type: Pods
+        value: 2
+        periodSeconds: 30
+      selectPolicy: Max
     scaleDown:
       stabilizationWindowSeconds: 60 
       policies:
