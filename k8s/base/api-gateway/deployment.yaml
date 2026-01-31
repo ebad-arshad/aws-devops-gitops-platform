@@ -27,7 +27,12 @@ spec:
       containers:
         - name: api-gateway
           image: ebadarshad/ecommerce-api-gateway
-
+          env:
+          - name: APP_VERSION
+            value: "v3.0.0"
+          envFrom:
+            - secretRef:
+                name: api-gateway-secret
 
           securityContext:
             runAsNonRoot: true
