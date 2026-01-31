@@ -30,10 +30,12 @@ spec:
           env:
           - name: APP_VERSION
             value: "v3.0.0"
-          envFrom:
-            - secretRef:
-                name: api-gateway-secret
-
+          - name: AUTH_URL
+            value: http://auth-service:5001
+          - name: PRODUCT_URL
+            value: http://product-service:5002
+          - name: ORDER_URL
+            value: http://order-service:5003
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000
