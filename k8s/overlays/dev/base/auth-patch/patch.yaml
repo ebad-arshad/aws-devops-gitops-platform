@@ -16,13 +16,13 @@ spec:
           ]
       containers:
         - name: auth
-          image: ebadarshad/ecommerce-auth:v2.0.0
+          image: ebadarshad/ecommerce-auth:v3.0.0
           resources:
             requests:
-              cpu: "100m"
+              cpu: "200m"
               memory: "128Mi"
             limits:
-              cpu: "250m" 
+              cpu: "350m" 
               memory: "256Mi"
           ports:
             - containerPort: 5001
