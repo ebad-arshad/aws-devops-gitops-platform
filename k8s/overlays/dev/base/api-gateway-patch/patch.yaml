@@ -3,19 +3,19 @@ kind: Rollout
 metadata:
   name: api-gateway
 spec:
+  strategy:
+    canary:
+      steps:
+      - setWeight: 20
+      - pause: {}
+      - setWeight: 50
+      - pause: {}
+      - setWeight: 70
+      - pause: {}
+      - setWeight: 100
+      - pause: {}
   template:
     spec:
-      strategy:
-        canary:
-          steps:
-          - setWeight: 20
-          - pause: {}
-          - setWeight: 50
-          - pause: {}
-          - setWeight: 70
-          - pause: {}
-          - setWeight: 100
-          - pause: {}
       containers:
         - name: api-gateway
           image: ebadarshad/ecommerce-api-gateway:v1.0.0
@@ -94,8 +94,8 @@ spec:
         periodSeconds: 15
       selectPolicy: Max
   scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
+    apiVersion: argoproj.io/v1alpha1
+    kind: Rollout
     name: api-gateway
   minReplicas: 2
   maxReplicas: 10
