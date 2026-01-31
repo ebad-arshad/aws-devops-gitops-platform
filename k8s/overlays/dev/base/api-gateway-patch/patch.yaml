@@ -1,13 +1,27 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: Rollout
 metadata:
   name: api-gateway
 spec:
   template:
     spec:
+      strategy:
+        canary:
+          steps:
+          - setWeight: 20
+          - pause: {}
+          - setWeight: 50
+          - pause: {}
+          - setWeight: 70
+          - pause: {}
+          - setWeight: 100
+          - pause: {}
       containers:
         - name: api-gateway
           image: ebadarshad/ecommerce-api-gateway:v1.0.0
+          env:
+          - name: APP_VERSION
+            value: "v1.0.0"
           resources:
             requests:
               cpu: "100m"

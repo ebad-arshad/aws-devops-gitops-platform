@@ -29,8 +29,11 @@ class App {
     }
 
     setRoutes() {
+        const APP_VERSION = process.env.APP_VERSION || "v1.0.0";
         this.app.get("/healthz", (req, res) => {
             res.status(200).send({
+                version: APP_VERSION,
+                podName: process.env.HOSTNAME,
                 status: 'OK',
                 service: 'product-service',
                 uptime: process.uptime(),

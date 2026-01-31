@@ -14,9 +14,12 @@ proxy.on('proxyReq', function (proxyReq, req, _res, _options) {
   }
 });
 
+const APP_VERSION = process.env.APP_VERSION || "v1.0.0";
 // Health check 
 app.get('/apis/healthz', (req, res) => {
   const healthcheck = {
+    version: APP_VERSION,
+    podName: process.env.HOSTNAME,
     uptime: process.uptime(),
     message: 'OK',
     timestamp: Date.now()
