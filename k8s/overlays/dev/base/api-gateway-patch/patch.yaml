@@ -18,10 +18,10 @@ spec:
     spec:
       containers:
         - name: api-gateway
-          image: ebadarshad/ecommerce-api-gateway:v1.0.0
+          image: ebadarshad/ecommerce-api-gateway:v2.0.0
           env:
           - name: APP_VERSION
-            value: "v1.0.0"
+            value: "v2.0.0"
           resources:
             requests:
               cpu: "100m"
