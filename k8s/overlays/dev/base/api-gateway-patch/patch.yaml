@@ -21,7 +21,7 @@ spec:
           image: ebadarshad/ecommerce-api-gateway:v1.0.0
           env:
           - name: APP_VERSION
-            value: "v2.0.0"
+            value: "v3.0.0"
           resources:
             requests:
               cpu: "100m"
