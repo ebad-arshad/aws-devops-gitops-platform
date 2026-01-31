@@ -27,7 +27,4 @@ spec:
       containers:
         - name: api-gateway
           image: ebadarshad/ecommerce-api-gateway
-          securityContext:
-            runAsNonRoot: true
-            runAsUser: 1000
-            allowPrivilegeEscalation: false
+
