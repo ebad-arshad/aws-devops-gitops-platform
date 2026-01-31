@@ -17,10 +17,6 @@ class App {
 
     setMiddlewares() {
         this.app.use(express.json());
-    }
-
-    setRoutes() {
-        const APP_VERSION = process.env.APP_VERSION || "v1.0.0";
         this.app.use(morgan((tokens, req, res) => {
             return JSON.stringify({
                 method: tokens.method(req, res),
@@ -31,6 +27,10 @@ class App {
                 service: "auth-service"
             });
         }));
+    }
+
+    setRoutes() {
+        const APP_VERSION = process.env.APP_VERSION || "v1.0.0";
         this.app.get("/healthz", (req, res) => {
             res.status(200).send({
                 version: APP_VERSION,

@@ -21,16 +21,19 @@ class App {
     }
 
     setupMessageBroker() {
-        const messageBroker = new MessageBroker();
-        messageBroker.connect();
+        try {
+            const messageBroker = new MessageBroker();
+            // Wrap this so if RabbitMQ is missing, the server still lives
+            messageBroker.connect().catch(err => {
+                console.error("⚠️ Message Broker failed to connect, but keeping server alive.");
+            });
+        } catch (error) {
+            console.error("Message Broker setup error:", error);
+        }
     }
 
     setMiddlewares() {
         this.app.use(express.json());
-    }
-
-    setRoutes() {
-        const APP_VERSION = process.env.APP_VERSION || "v1.0.0";
         this.app.use(morgan((tokens, req, res) => {
             return JSON.stringify({
                 method: tokens.method(req, res),
@@ -41,6 +44,10 @@ class App {
                 service: "order-service"
             });
         }));
+    }
+
+    setRoutes() {
+        const APP_VERSION = process.env.APP_VERSION || "v1.0.0";
         this.app.get("/healthz", (req, res) => {
             res.status(200).send({
                 version: APP_VERSION,

@@ -44,16 +44,30 @@ app.get('/apis/healthz', (req, res) => {
   }
 });
 
-app.use("/apis/auth", (req, res) => {
-  proxy.web(req, res, { target: config.authUrl });
-});
+
 
 app.use("/apis/product/healthz", (req, res) => {
-  proxy.web(req, res, { target: `${config.productUrl}/healthz` });
+  proxy.web(req, res, { target: `${config.productUrl}/healthz`,ignorePath: true });
 });
 
 app.use("/apis/order/healthz", (req, res) => {
-  proxy.web(req, res, { target: `${config.orderUrl}/healthz` });
+  proxy.web(req, res, { target: `${config.orderUrl}/healthz`,ignorePath: true });
+});
+
+app.use("/apis/auth", (req, res) => {
+  const originalUrl = req.url;
+  req.url = req.url.replace(/^\/apis\/auth/, '');
+  if (req.url === "") {
+    req.url = "/";
+  }
+
+  console.log(`[Proxy] Routing ${originalUrl} -> ${config.authUrl}${req.url}`);
+
+  proxy.web(req, res, { 
+    target: config.authUrl,
+    changeOrigin: true
+  })
+
 });
 
 // Route requests to the product service
