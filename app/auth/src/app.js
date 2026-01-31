@@ -1,5 +1,6 @@
 const express = require("express");
 const config = require("./config");
+const morgan = require('morgan');
 const AuthController = require("./controllers/authController");
 
 class App {
@@ -20,12 +21,22 @@ class App {
 
     setRoutes() {
         const APP_VERSION = process.env.APP_VERSION || "v1.0.0";
+        this.app.use(morgan((tokens, req, res) => {
+            return JSON.stringify({
+                method: tokens.method(req, res),
+                url: tokens.url(req, res),
+                status: tokens.status(req, res),
+                responseTime: tokens.res(req, res, 'content-length'),
+                time: tokens['response-time'](req, res) + 'ms',
+                service: "auth-service"
+            });
+        }));
         this.app.get("/healthz", (req, res) => {
             res.status(200).send({
                 version: APP_VERSION,
                 podName: process.env.HOSTNAME,
                 status: 'OK',
-                service: 'product-service',
+                service: 'auth-service',
                 uptime: process.uptime(),
                 timestamp: Date.now()
             });

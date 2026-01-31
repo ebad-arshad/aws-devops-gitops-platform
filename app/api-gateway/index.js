@@ -3,7 +3,7 @@ const httpProxy = require("http-proxy");
 const config = require('./config');
 const authMiddleware = require("./middlewares/authMiddleware");
 const roleMiddleware = require("./middlewares/roleMiddleware");
-
+const morgan = require('morgan');
 const proxy = httpProxy.createProxyServer();
 const app = express();
 
@@ -16,13 +16,26 @@ proxy.on('proxyReq', function (proxyReq, req, _res, _options) {
 
 const APP_VERSION = process.env.APP_VERSION || "v1.0.0";
 // Health check 
+
+app.use(morgan((tokens, req, res) => {
+    return JSON.stringify({
+        method: tokens.method(req, res),
+        url: tokens.url(req, res),
+        status: tokens.status(req, res),
+        responseTime: tokens.res(req, res, 'content-length'),
+        time: tokens['response-time'](req, res) + 'ms',
+        service: "api-gateway-service"
+    });
+}));
+
 app.get('/apis/healthz', (req, res) => {
   const healthcheck = {
     version: APP_VERSION,
     podName: process.env.HOSTNAME,
-    uptime: process.uptime(),
     message: 'OK',
-    timestamp: Date.now()
+    uptime: process.uptime(),
+    timestamp: Date.now(),
+    service: 'api-gateway-service'
   };
   try {
     res.status(200).send(healthcheck);

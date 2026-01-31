@@ -5,6 +5,7 @@ const getUserMiddleware = require("./middlewares/getUserMiddleware");
 const OrderController = require("./controllers/orderController");
 const { orderSchema } = require("./validators/orderValidator");
 const MessageBroker = require("./utils/messageBroker");
+const morgan = require('morgan');
 
 class App {
     constructor() {
@@ -30,6 +31,16 @@ class App {
 
     setRoutes() {
         const APP_VERSION = process.env.APP_VERSION || "v1.0.0";
+        this.app.use(morgan((tokens, req, res) => {
+            return JSON.stringify({
+                method: tokens.method(req, res),
+                url: tokens.url(req, res),
+                status: tokens.status(req, res),
+                responseTime: tokens.res(req, res, 'content-length'),
+                time: tokens['response-time'](req, res) + 'ms',
+                service: "order-service"
+            });
+        }));
         this.app.get("/healthz", (req, res) => {
             res.status(200).send({
                 version: APP_VERSION,
