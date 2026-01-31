@@ -39,7 +39,9 @@ spec:
             runAsNonRoot: true
             runAsUser: 1000
             allowPrivilegeEscalation: false
-
+          env:
+          - name: APP_VERSION
+            value: ""
           envFrom:
             - secretRef:
                 name: api-gateway-secret

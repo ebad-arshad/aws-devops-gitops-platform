@@ -16,7 +16,7 @@ spec:
             ]
       containers:
         - name: order
-          image: ebadarshad/ecommerce-order:health
+          image: ebadarshad/ecommerce-order:v1.0.0
           resources:
             requests:
               cpu: "100m"
