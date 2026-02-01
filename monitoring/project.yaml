@@ -4,7 +4,7 @@ metadata:
   name: grafana-project
   namespace: argocd # Projects must be created in the Argo CD namespace
   finalizers:
-  - resources-finalizer.argocd.argoproj.io # Ensures project is not deleted while applications still reference it
+    - resources-finalizer.argocd.argoproj.io/foreground
 spec:
   description: This ecommerce project will be for grafana
   sourceRepos:

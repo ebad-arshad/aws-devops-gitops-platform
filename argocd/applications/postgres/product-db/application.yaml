@@ -3,6 +3,8 @@ kind: Application
 metadata:
   name: product-db-application # The name of the Argo CD Application resource
   namespace: argocd # The namespace where Argo CD is installed
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io/foreground
 spec:
   project: ecommerce-project-dev # The Argo CD project the application belongs to
   destination:
