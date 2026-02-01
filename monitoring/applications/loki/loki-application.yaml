@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: loki-stack
+  name: loki
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io/foreground
@@ -65,7 +65,7 @@ spec:
         valuesObject:
           config:
             clients:
-              - url: http://loki-stack-gateway.monitoring.svc.cluster.local:80/loki/api/v1/push
+              - url: http://loki-gateway.monitoring.svc.cluster.local:80/loki/api/v1/push
           pipelineStages:
             - docker: {}
             - json:
