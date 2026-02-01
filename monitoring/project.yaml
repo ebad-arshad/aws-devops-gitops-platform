@@ -9,6 +9,7 @@ spec:
   description: This ecommerce project will be for grafana
   sourceRepos:
   - 'https://prometheus-community.github.io/helm-charts'
+  - 'https://grafana.github.io/helm-charts'
   destinations:
   - namespace: argocd
     server: https://kubernetes.default.svc
