@@ -4,9 +4,6 @@ metadata:
   name: auth
 spec:
   template:
-    metadata:
-      annotations:
-        instrumentation.opentelemetry.io/inject-nodejs: "true"
     spec:
       initContainers:
       - name: wait-for-db

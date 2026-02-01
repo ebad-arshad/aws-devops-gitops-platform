@@ -11,7 +11,6 @@ spec:
   - 'https://github.com/ebad-arshad/aws-devops-gitops-platform'
   - 'https://prometheus-community.github.io/helm-charts'
   - 'https://grafana.github.io/helm-charts'
-  - 'https://open-telemetry.github.io/opentelemetry-helm-charts'
   destinations:
   - namespace: argocd
     server: https://kubernetes.default.svc
