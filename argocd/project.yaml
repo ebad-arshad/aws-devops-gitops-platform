@@ -10,6 +10,7 @@ spec:
   # Allow manifests to deploy from any Git repos, or specify a list of allowed repo URLs
   sourceRepos:
   - 'https://github.com/ebad-arshad/aws-devops-gitops-platform'
+  - 'https://open-telemetry.github.io/opentelemetry-helm-charts'
   # Only permit applications to deploy to specific destination clusters and namespaces
   destinations:
   - namespace: argocd  # Add this so the master app can create child apps!
