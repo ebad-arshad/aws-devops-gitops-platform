@@ -2,10 +2,11 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: order
-  annotations:
-    instrumentation.opentelemetry.io/inject-nodejs: "true"
 spec:
   template:
+    metadata:
+      annotations:
+        instrumentation.opentelemetry.io/inject-nodejs: "true"
     spec:
       initContainers:
         - name: wait-for-db

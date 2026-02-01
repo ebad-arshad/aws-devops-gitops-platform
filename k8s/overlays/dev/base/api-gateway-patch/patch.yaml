@@ -2,8 +2,6 @@ apiVersion: argoproj.io/v1alpha1
 kind: Rollout
 metadata:
   name: api-gateway
-  annotations:
-    instrumentation.opentelemetry.io/inject-nodejs: "true"
 spec:
   strategy:
     canary:
@@ -17,6 +15,9 @@ spec:
       - setWeight: 100
       - pause: {}
   template:
+    metadata:
+      annotations:
+        instrumentation.opentelemetry.io/inject-nodejs: "true"
     spec:
       containers:
         - name: api-gateway
