@@ -60,14 +60,11 @@ app.use("/apis/auth", (req, res) => {
   if (req.url === "") {
     req.url = "/";
   }
-
   console.log(`[Proxy] Routing ${originalUrl} -> ${config.authUrl}${req.url}`);
-
   proxy.web(req, res, { 
     target: config.authUrl,
     changeOrigin: true
   })
-
 });
 
 // Route requests to the product service
