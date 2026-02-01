@@ -17,5 +17,8 @@ spec:
   - namespace: ecommerce-dev # can be a specific namespace
     server: https://kubernetes.default.svc # or the cluster URL
   clusterResourceWhitelist:
-  - group: ''        # The 'core' group (empty string)
-    kind: Namespace
+  - group: '*'
+    kind: '*'
+  namespaceResourceWhitelist:
+  - group: '*'
+    kind: '*'
