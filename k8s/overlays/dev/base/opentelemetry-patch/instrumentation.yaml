@@ -1,0 +1,13 @@
+apiVersion: opentelemetry.io/v1alpha1
+kind: Instrumentation
+metadata:
+  name: nodejs-instrumentation
+  namespace: ecommerce-dev
+spec:
+  exporter:
+    endpoint: http://tempo.monitoring.svc.cluster.local:4317
+  propagators:
+    - tracecontext
+    - baggage
+  nodejs:
+    image: ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-nodejs:latest
