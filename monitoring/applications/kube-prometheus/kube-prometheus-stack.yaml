@@ -28,6 +28,25 @@ spec:
             hosts:
               - grafana.local
             path: /
+
+          additionalDataSources:
+              - name: Tempo
+                type: tempo
+                uid: tempo
+                url: http://tempo:3200
+                access: proxy
+              - name: Loki
+                type: loki
+                uid: loki
+                url: http://loki-gateway:80
+                access: proxy
+                jsonData:
+                  derivedFields:
+                    - datasourceUid: tempo
+                      matcherRegex: "trace_id=(\\w+)"
+                      name: TraceID
+                      url: "$${__value.raw}"
+        
         prometheus:
           prometheusSpec:
             scrapeInterval: 15s
